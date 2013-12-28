@@ -29,6 +29,7 @@ source src/drivers/intel/Kconfig
 source src/drivers/ipmi/Kconfig
 source src/drivers/lenovo/Kconfig
 source src/drivers/maxim/Kconfig
+source src/drivers/mmc/Kconfig
 source src/drivers/parade/Kconfig
 if PC80_SYSTEM
 source src/drivers/pc80/Kconfig

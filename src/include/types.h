@@ -51,7 +51,14 @@ enum cb_err {
 
 	/* Keyboard test failures */
 	CB_KBD_CONTROLLER_FAILURE = -200,
-	CB_KBD_INTERFACE_FAILURE = -201
+	CB_KBD_INTERFACE_FAILURE = -201,
+
+	/* MMC/SD card errors */
+	CB_MMC_NO_CARD = -300,			/* No SD/MMC card inserted */
+	CB_MMC_UNUSABLE = -301,			/* Unusable Card */
+	CB_MMC_COMM_ERROR = -302,		/* Communications Error */
+	CB_MMC_TIMEOUT = -303,
+	CB_MMC_IN_PROGRESS = -304,		/* operation is in progress */
 };
 
 #endif /* __TYPES_H */

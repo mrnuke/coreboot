@@ -26,6 +26,7 @@ subdirs-y += i2c
 subdirs-y += intel
 subdirs-y += lenovo
 subdirs-y += maxim
+subdirs-y += mmc
 subdirs-y += net
 subdirs-y += parade
 subdirs-y += sil
