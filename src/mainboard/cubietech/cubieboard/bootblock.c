@@ -28,6 +28,9 @@
 #define GPB_UART0_FUNC			2
 #define GPB_UART0_PINS			((1 << 22) | (1 << 23))
 
+#define GPC_NAND_FUNC			5
+#define GPC_NAND_PINS			0x0100ffff /* PC0 thru PC15 and PC24 */
+
 #define GPF_SD0_FUNC			2
 #define GPF_SD0_PINS			0x3f	/* PF0 thru PF5 */
 #define GPH1_SD0_DET_FUNC		5
@@ -87,6 +90,9 @@ static void cubieboard_setup_gpios(void)
 	/* Mux SD pins */
 	gpio_set_multipin_func(GPF, GPF_SD0_PINS, GPF_SD0_FUNC);
 	gpio_set_pin_func(GPH, 1, GPH1_SD0_DET_FUNC);
+
+	/* Mux NAND pins */
+	gpio_set_multipin_func(GPC, GPC_NAND_PINS, GPC_NAND_FUNC);
 }
 
 static void cubieboard_enable_uart(void)
