@@ -17,16 +17,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include "chip.h"
+#include "dimmSpd.h"
+
 #include <device/pci_def.h>
 #include <device/device.h>
-
-/* warning: Porting.h includes an open #pragma pack(1) */
-#include "Porting.h"
-#include "AGESA.h"
-#include "amdlib.h"
-#include "dimmSpd.h"
-#include "chip.h"
-
+#include <vendorcode/amd/agesa/f15tn/Lib/amdlib.h>
 
 #define DIMENSION(array)(sizeof (array)/ sizeof (array [0]))
 

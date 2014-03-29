@@ -18,15 +18,17 @@
  */
 
 #include "agesawrapper.h"
-#include "amdlib.h"
-#include "Ids.h"
-#include "OptionsIds.h"
-#include "heapManager.h"
-#include "FchPlatform.h"
-#include "cbfs.h"
 #include "dimmSpd.h"
 #include "fam15tn_callouts.h"
+
+#include <cbfs.h>
 #include <cbmem.h>
+#include <vendorcode/amd/agesa/f15tn/Include/Ids.h>
+#include <vendorcode/amd/agesa/f15tn/Lib/amdlib.h>
+#include <vendorcode/amd/agesa/f15tn/Proc/CPU/heapManager.h>
+#include <vendorcode/amd/agesa/f15tn/Proc/Fch/FchPlatform.h>
+#include <vendorcode/amd/agesa/f15tn/Proc/IDS/OptionsIds.h>
+
 
 #define AGESA_RUNTIME_SIZE 4096
 

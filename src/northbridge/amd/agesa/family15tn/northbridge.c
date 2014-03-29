@@ -17,30 +17,29 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <console/console.h>
-#include <arch/io.h>
-#include <stdint.h>
-#include <device/device.h>
-#include <device/pci.h>
-#include <device/pci_ids.h>
-#include <device/hypertransport.h>
-#include <stdlib.h>
-#include <string.h>
-#include <lib.h>
-#include <cpu/cpu.h>
-#include <cbmem.h>
-#include <AGESA.h>
-
-#include <cpu/x86/lapic.h>
-#include <cpu/amd/mtrr.h>
-
-#include <Porting.h>
-#include <Options.h>
-#include <Topology.h>
-#include <cpu/amd/amdfam15.h>
-#include <cpuRegisters.h>
 #include "agesawrapper.h"
 #include "northbridge.h"
+
+#include <arch/io.h>
+#include <console/console.h>
+#include <cbmem.h>
+#include <cpu/amd/amdfam15.h>
+#include <cpu/cpu.h>
+#include <cpu/x86/lapic.h>
+#include <cpu/amd/mtrr.h>
+#include <device/device.h>
+#include <device/hypertransport.h>
+#include <device/pci.h>
+#include <device/pci_ids.h>
+#include <lib.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <vendorcode/amd/agesa/f15tn/AGESA.h>
+#include <vendorcode/amd/agesa/f15tn/Include/Options.h>
+#include <vendorcode/amd/agesa/f15tn/Include/Topology.h>
+#include <vendorcode/amd/agesa/f15tn/Proc/CPU/cpuRegisters.h>
 
 #define MAX_NODE_NUMS (MAX_NODES * MAX_DIES)
 

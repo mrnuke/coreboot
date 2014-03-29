@@ -20,6 +20,8 @@
 #ifndef _AGESA_FAM15TN_CHIP_H_
 #define _AGESA_FAM15TN_CHIP_H_
 
+#include <stdint.h>
+
 struct northbridge_amd_agesa_family15tn_config
 {
 	u8 spdAddrLookup[2][2][4];

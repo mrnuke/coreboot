@@ -20,8 +20,7 @@
 #ifndef CALLOUTS_AMD_AGESA_FAM15TN_H
 #define CALLOUTS_AMD_AGESA_FAM15TN_H
 
-#include "Porting.h"
-#include "AGESA.h"
+#include <vendorcode/amd/agesa/f15tn/AGESA.h>
 
 #define BIOS_HEAP_START_ADDRESS  0x010000000
 #define BIOS_HEAP_SIZE				0x30000
