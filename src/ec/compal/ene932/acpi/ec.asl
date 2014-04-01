@@ -259,6 +259,7 @@ Device (EC0)
 
 	Method (_CRS, 0, NotSerialized)
 	{
+		Store("EC _CRS received", Debug)
 		Name (ECMD, ResourceTemplate()
 		{
 			IO (Decode16, 0x62, 0x62, 0, 1)
@@ -269,6 +270,7 @@ Device (EC0)
 
 	Method (_REG, 2, NotSerialized)
 	{
+		Store("EC _REG2 received", Debug)
 		// Initialize AC power state
 		Store (ADPT, \PWRS)
 
@@ -305,6 +307,11 @@ Device (EC0)
  * Hotkey break Function     46h
  */
 
+	Method (_Q10, 0, NotSerialized)
+	{
+		Store("Q10 received: DTS temperature update ", Debug)
+	}
+
 	/* Decrease brightness hotkey */
 	Method (_Q11, 0, NotSerialized)
 	{
@@ -339,6 +346,7 @@ Device (EC0)
 	Method (_Q37, 0, NotSerialized)
 	{
 		Store (One, \PWRS)
+		Store("Q37 received", Debug)
 		Notify (AC, 0x80)
 		Notify (BATX, 0x80)
 		// TODO ADD CPU power profile
@@ -349,6 +357,7 @@ Device (EC0)
 	Method (_Q38, 0, NotSerialized)
 	{
 		Store (Zero, \PWRS)
+		Store("Q38 received", Debug)
 		Notify (AC, 0x80)
 		Notify (BATX, 0x80)
 		// TODO ADD CPU power profile
@@ -364,12 +373,14 @@ Device (EC0)
 	// Battery at critical low state
 	Method (_Q22, 0, NotSerialized)
 	{
+		Store("Q22 received", Debug)
 		Notify (BATX, 0x80)
 	}
 
 	// Battery insert
 	Method(_Q25, 0, NotSerialized)
 	{
+		Store("Q25 received", Debug)
 		Notify(BATX, 0x81)
 		Notify(BATX, 0x80)
 	}
@@ -377,11 +388,34 @@ Device (EC0)
 	// Commuation Device Disable/Enable Event
 	Method(_Q60, 0, NotSerialized)
 	{
+		Store("Q60 received", Debug)
 		IF(WLEX) //if Wlan exist
 		{
 			//TODO Store(WLAT, LANE)
 		}
 	}
+
+	Method (_Q42, 0, NotSerialized)
+	{
+		Store("Q42 received", Debug)
+	}
+	Method (_Q43, 0, NotSerialized)
+	{
+		Store("Q43 received", Debug)
+	}
+	Method (_Q44, 0, NotSerialized)
+	{
+		Store("Q44 received", Debug)
+	}
+	Method (_Q45, 0, NotSerialized)
+	{
+		Store("Q45 received", Debug)
+	}
+	Method (_Q46, 0, NotSerialized)
+	{
+		Store("Q46 received", Debug)
+	}
+
 
 	#include "ac.asl"
 	#include "battery.asl"

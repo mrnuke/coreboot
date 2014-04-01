@@ -118,6 +118,7 @@ Scope (\_SB) {
 		/* Toggle wireless */
 		Method (WLTG)
 		{
+			Store("Q40 received (toggle wireless)", Debug)
 			Store( Not(GP57), GP57 )
 		}
 		/* Return lid state */
