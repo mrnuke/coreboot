@@ -57,17 +57,20 @@ Device (BATX)
 	// Method to enable full battery workaround
 	Method (BFWE)
 	{
+		Store("bat BFWE received", Debug)
 		Store (One, BFWK)
 	}
 
 	// Method to disable full battery workaround
 	Method (BFWD)
 	{
+		Store("bat BFWD received", Debug)
 		Store (Zero, BFWK)
 	}
 
 	Method (_STA, 0, Serialized)
 	{
+		Store("bat _STA received", Debug)
 		If (BOL0) {
 			Return (0x1F)
 		} Else {
@@ -77,6 +80,7 @@ Device (BATX)
 
 	Method (_BIF, 0, Serialized)
 	{
+		Store("bat _BIF received", Debug)
 		// Update fields from EC
 		Store (BAM0, Index (PBIF, 0))
 		Store (BDC0, Index (PBIF, 1))
@@ -107,6 +111,8 @@ Device (BATX)
 		// bit 1 = charging
 		// bit 2 = critical level
 		//
+
+		Store("bat _BST received", Debug)
 
 		// Get battery state from EC and save it for the charging workaround
 		Store (BST0, Local0)

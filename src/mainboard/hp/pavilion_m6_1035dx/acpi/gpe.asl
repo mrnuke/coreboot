@@ -19,13 +19,43 @@
 
 Scope(\_GPE) {	/* Start Scope GPE */
 
+	Method(_L00) {
+		Store("L00 received", Debug)
+	}
+
+	Method(_L01) {
+		Store("L01 received", Debug)
+	}
+
+	Method(_L02) {
+		Store("L02 received", Debug)
+	}
+
+	Method(_L04) {
+		Store("L04 received", Debug)
+	}
+
+	Method(_L05) {
+		Store("L05 received", Debug)
+	}
+
+	Method(_L06) {
+		Store("L06 received", Debug)
+	}
+
+	Method(_L07) {
+		Store("L07 received", Debug)
+	}
+
 	/*  Legacy PM event  */
 	Method(_L08) {
+		Store("L08 received", Debug)
 		/* DBGO("\\_GPE\\_L08\n") */
 	}
 
 	/*  Temp warning (TWarn) event  */
 	Method(_L09) {
+		Store("L09 received", Debug)
 		/* DBGO("\\_GPE\\_L09\n") */
 		/* Notify (\_TZ.TZ00, 0x80) */
 	}
@@ -45,12 +75,35 @@ Scope(\_GPE) {	/* Start Scope GPE */
 
 	/*  ExtEvent0 SCI event  */
 	Method(_L10) {
+		Store("L10 received", Debug)
 		/* DBGO("\\_GPE\\_L10\n") */
 	}
 
 
 	/*  ExtEvent1 SCI event  */
 	Method(_L11) {
+		Store("L11 received", Debug)
+		/* DBGO("\\_GPE\\_L11\n") */
+	}
+
+	Method(_L12) {
+		Store("L12 received", Debug)
+	}
+
+	//Method(_L13) {
+	//	Store("L13 received", Debug)
+	//}
+
+	Method(_L14) {
+		Store("L14 received", Debug)
+	}
+
+	Method(_L15) {
+		Store("L15 received", Debug)
+	}
+
+	Method(_L17) {
+		Store("L17 received (probably EC SMI)", Debug)
 		/* DBGO("\\_GPE\\_L11\n") */
 	}
 
@@ -73,8 +126,13 @@ Scope(\_GPE) {	/* Start Scope GPE */
 
 	/*  Azalia SCI event  */
 	Method(_L1B) {
+		Store("L1B received", Debug)
 		/* DBGO("\\_GPE\\_L1B\n") */
 		Notify(\_SB.PCI0.AZHD, 0x02) /* NOTIFY_DEVICE_WAKE */
 		Notify(\_SB.PWRB, 0x02) /* NOTIFY_DEVICE_WAKE */
+	}
+
+	Method(_L1C) {
+		Store("L1C received", Debug)
 	}
 } 	/* End Scope GPE */
