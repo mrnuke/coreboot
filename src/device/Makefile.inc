@@ -17,6 +17,8 @@ ramstage-y += smbus_ops.c
 romstage-y += device_romstage.c
 romstage-$(CONFIG_PCI) += pci_early.c
 
+smm-$(CONFIG_HAVE_SMI_HANDLER) += pci_early.c
+
 subdirs-y += oprom
 
 ramstage-$(CONFIG_VGA_ROM_RUN) += pci_rom.c

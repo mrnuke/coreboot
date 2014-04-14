@@ -24,7 +24,7 @@
 #include <device/pci_def.h>
 #include <delay.h>
 
-#ifdef __PRE_RAM__
+#if defined(__PRE_RAM__) || defined (__SMM__)
 
 unsigned pci_find_next_capability(device_t dev, unsigned cap, unsigned last)
 {
