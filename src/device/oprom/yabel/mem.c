@@ -200,13 +200,15 @@ my_rdb(u32 addr)
 	u8 rval;
 	if (translated != 0) {
 		//translation successful, access VGA Memory (BAR or Legacy...)
-		DEBUG_PRINTF_MEM("%s(%08x): access to VGA Memory\n",
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%08x): access to VGA Memory\n",
 				 __func__, addr);
 		//DEBUG_PRINTF_MEM("%s(%08x): translated_addr: %llx\n", __func__, addr, translated_addr);
 		set_ci();
 		rval = *((u8 *) translated_addr);
 		clr_ci();
-		DEBUG_PRINTF_MEM("%s(%08x) VGA --> %02x\n", __func__, addr,
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%08x) VGA --> %02x\n", __func__, addr,
 				 rval);
 		return rval;
 	} else if (addr > M.mem_size) {
@@ -232,7 +234,8 @@ my_rdw(u32 addr)
 	u16 rval;
 	if (translated != 0) {
 		//translation successful, access VGA Memory (BAR or Legacy...)
-		DEBUG_PRINTF_MEM("%s(%08x): access to VGA Memory\n",
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%08x): access to VGA Memory\n",
 				 __func__, addr);
 		//DEBUG_PRINTF_MEM("%s(%08x): translated_addr: %llx\n", __func__, addr, translated_addr);
 		// check for legacy memory, because of the remapping to BARs, the reads must
@@ -257,7 +260,8 @@ my_rdw(u32 addr)
 				clr_ci();
 			}
 		}
-		DEBUG_PRINTF_MEM("%s(%08x) VGA --> %04x\n", __func__, addr,
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%08x) VGA --> %04x\n", __func__, addr,
 				 rval);
 		return rval;
 	} else if (addr > M.mem_size) {
@@ -283,7 +287,8 @@ my_rdl(u32 addr)
 	u32 rval;
 	if (translated != 0) {
 		//translation successful, access VGA Memory (BAR or Legacy...)
-		DEBUG_PRINTF_MEM("%s(%x): access to VGA Memory\n",
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%x): access to VGA Memory\n",
 				 __func__, addr);
 		//DEBUG_PRINTF_MEM("%s(%08x): translated_addr: %llx\n", __func__, addr, translated_addr);
 		// check for legacy memory, because of the remapping to BARs, the reads must
@@ -312,7 +317,8 @@ my_rdl(u32 addr)
 				clr_ci();
 			}
 		}
-		DEBUG_PRINTF_MEM("%s(%08x) VGA --> %08x\n", __func__, addr,
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%08x) VGA --> %08x\n", __func__, addr,
 				 rval);
 		//HALT_SYS();
 		return rval;
@@ -345,7 +351,8 @@ my_wrb(u32 addr, u8 val)
 	u8 translated = biosemu_dev_translate_address(IORESOURCE_MEM, &translated_addr);
 	if (translated != 0) {
 		//translation successfull, access VGA Memory (BAR or Legacy...)
-		DEBUG_PRINTF_MEM("%s(%x, %x): access to VGA Memory\n",
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%x, %x): access to VGA Memory\n",
 				 __func__, addr, val);
 		//DEBUG_PRINTF_MEM("%s(%08x): translated_addr: %llx\n", __func__, addr, translated_addr);
 		set_ci();
@@ -370,7 +377,8 @@ my_wrw(u32 addr, u16 val)
 	u8 translated = biosemu_dev_translate_address(IORESOURCE_MEM, &translated_addr);
 	if (translated != 0) {
 		//translation successfull, access VGA Memory (BAR or Legacy...)
-		DEBUG_PRINTF_MEM("%s(%x, %x): access to VGA Memory\n",
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%x, %x): access to VGA Memory\n",
 				 __func__, addr, val);
 		//DEBUG_PRINTF_MEM("%s(%08x): translated_addr: %llx\n", __func__, addr, translated_addr);
 		// check for legacy memory, because of the remapping to BARs, the reads must
@@ -415,7 +423,8 @@ my_wrl(u32 addr, u32 val)
 	u8 translated = biosemu_dev_translate_address(IORESOURCE_MEM, &translated_addr);
 	if (translated != 0) {
 		//translation successfull, access VGA Memory (BAR or Legacy...)
-		DEBUG_PRINTF_MEM("%s(%x, %x): access to VGA Memory\n",
+		if (!(addr >= 0xc0000 && addr < 0xd0000))
+			DEBUG_PRINTF_MEM("%s(%x, %x): access to VGA Memory\n",
 				 __func__, addr, val);
 		//DEBUG_PRINTF_MEM("%s(%08x): translated_addr: %llx\n",  __func__, addr, translated_addr);
 		// check for legacy memory, because of the remapping to BARs, the reads must

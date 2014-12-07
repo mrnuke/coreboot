@@ -46,6 +46,6 @@ config HEAP_SIZE
 
 config RAMTOP
 	hex
-	default 0x400000
+	default 0x2000000
 
 endif # NORTHBRIDGE_AMD_AGESA
