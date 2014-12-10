@@ -23,3 +23,5 @@ romstage-y += agesawrapper.c
 ramstage-y += iommu.c
 ramstage-y += northbridge.c
 ramstage-y += agesawrapper.c
+ramstage-y += vga.c
+ramstage-y += vgareplay.c
