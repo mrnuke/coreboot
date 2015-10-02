@@ -105,6 +105,7 @@ $(obj)/arch/x86/id.bootblock.o: $(obj)/build.h
 
 ifeq ($(CONFIG_C_ENVIRONMENT_BOOTBLOCK),y)
 
+bootblock-y += bootblock_crt0.S
 bootblock-y += memlayout.ld
 
 ifeq ($(CONFIG_ARCH_BOOTBLOCK_X86_32),y)
@@ -122,7 +123,7 @@ else
 LDFLAGS_bootblock += -m elf_x86_64 --oformat elf64-x86-64
 endif
 
-bootblock-y += bootblock.S
+bootblock-y += bootblock_legacy.S
 bootblock-y += walkcbfs.S
 $(obj)/arch/x86/bootblock.bootblock.o: $(objgenerated)/bootblock.inc
 
