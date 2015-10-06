@@ -102,6 +102,8 @@ endef
 
 ifeq ($(CONFIG_ARCH_BOOTBLOCK_X86_32)$(CONFIG_ARCH_BOOTBLOCK_X86_64),y)
 
+CFLAGS_bootblock+=-Wa,--divide
+
 bootblock-y += boot.c
 bootblock-y += memcpy.c
 bootblock-y += memset.c
