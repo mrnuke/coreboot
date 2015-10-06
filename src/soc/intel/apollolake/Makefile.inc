@@ -8,8 +8,13 @@ subdirs-y += ../../../cpu/x86/smm
 subdirs-y += ../../../cpu/x86/tsc
 
 bootblock-y += bootblock/bootblock_car.c
+bootblock-y += cpu.c
 bootblock-y += bootblock/cache_as_ram.S
 bootblock-y += bootblock/early_chipset_config.S
+
+romstage-y += cpu.c
+
+ramstage-y += cpu.c
 
 romstage-y += placeholders.c
 smm-y += placeholders.c
