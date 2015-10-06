@@ -165,8 +165,12 @@ $(objgenerated)/bootblock.inc: $(src)/arch/x86/$(subst ",,$(CONFIG_BOOTBLOCK_SOU
 # $(obj)/arch/x86/bootblock.bootblock.ld is part of $(bootblock-objs)
 $(objcbfs)/bootblock.debug: $$(bootblock-objs)
 	@printf "    LINK       $(subst $(obj)/,,$(@))\n"
-	$(LD_bootblock) $(LDFLAGS_bootblock) -o $@ -L$(obj) \
-		$(filter-out %.ld,$(bootblock-objs)) \
+	$(LD_bootblock) $(LDFLAGS_bootblock) -static \
+		-o $@ $(COMPILER_RT_FLAGS_bootblock) -L$(obj) \
+		-whole-archive --start-group \
+			$(filter %.o,$(bootblock-objs)) \
+			--no-whole-archive $(COMPILER_RT_bootblock) \
+		--end-group \
 		-T $(obj)/arch/x86/bootblock.bootblock.ld
 
 endif # C_ENVIRONMENT_BOOTBLOCK
