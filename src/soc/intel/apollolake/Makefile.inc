@@ -41,7 +41,7 @@ romstage-y += placeholders.c
 smm-y += placeholders.c
 ramstage-y += placeholders.c
 
-# cpu_microcode_bins += ???
+cpu_microcode_bins += /dev/null
 
 CPPFLAGS_common += -I$(src)/soc/intel/apollolake/include
 
