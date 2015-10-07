@@ -7,12 +7,16 @@ subdirs-y += ../../../cpu/x86/mtrr
 subdirs-y += ../../../cpu/x86/smm
 subdirs-y += ../../../cpu/x86/tsc
 
+bootblock-y += bootblock/bootblock_car.c
+bootblock-y += bootblock/cache_as_ram.S
+bootblock-y += bootblock/early_chipset_config.S
+
 romstage-y += placeholders.c
 smm-y += placeholders.c
 ramstage-y += placeholders.c
 
 # cpu_microcode_bins += ???
 
-# CPPFLAGS_common += -I$(src)/soc/intel/apollolake/include
+CPPFLAGS_common += -I$(src)/soc/intel/apollolake/include
 
 endif
