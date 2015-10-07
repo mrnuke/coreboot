@@ -10,22 +10,13 @@
  * (at your option) any later version.
  */
 
-#include <arch/io.h>
-#include <console/console.h>
-#include <soc/bootblock.h>
-#include <soc/uart.h>
+#include <console/uart.h>
 
-void bootblock_car_main(void)
+/*
+ * TODO: We need a mechanism to return the new BAR once the resource allocator
+ * gives us a new location.
+ */
+uintptr_t uart_platform_base(int idx)
 {
-	/* Quick post code to show we made it to C code */
-	outb(0x30, 0x80);
-
-	if (IS_ENABLED(CONFIG_BOOTBLOCK_CONSOLE)) {
-		lpss_console_uart_init();
-		console_init();
-	}
-
-	/* Don't return, so we see the above post code */
-	while (1)
-		;
+	return (CONFIG_CONSOLE_UART_BASE_ADDRESS);
 }

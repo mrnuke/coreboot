@@ -20,6 +20,7 @@ config CPU_SPECIFIC_OPTIONS
 	# Misc options
 	select C_ENVIRONMENT_BOOTBLOCK
 	select COLLECT_TIMESTAMPS
+	select DRIVERS_UART_8250MEM_32
 	select HAVE_INTEL_FIRMWARE
 	select MMCONF_SUPPORT
 	select MMCONF_SUPPORT_DEFAULT
@@ -40,6 +41,11 @@ config MMCONF_BASE_ADDRESS
 config IOSF_BASE_ADDRESS
 	hex "MMIO Base Address of sideband bus"
 	default 0xd0000000
+
+config CONSOLE_UART_BASE_ADDRESS
+	depends on CONSOLE_SERIAL
+	hex "MMIO base address for UART"
+	default 0xde000000
 
 config DCACHE_RAM_BASE
 	hex "Base address of cache-as-RAM"
