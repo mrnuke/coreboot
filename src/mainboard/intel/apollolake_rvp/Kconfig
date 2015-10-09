@@ -5,7 +5,6 @@ config BOARD_SPECIFIC_OPTIONS
 	select SOC_INTEL_APOLLOLAKE
 	select BOARD_ROMSIZE_KB_8192
 	select HAVE_ACPI_TABLES
-	select USE_BLOBS
 
 config MAINBOARD_DIR
 	string
@@ -31,10 +30,6 @@ config PREBUILT_SPI_IMAGE
 config IFD_BIOS_END
 	hex
 	default 0x6FF000
-
-config IFD_BIOS_START
-	hex
-	default 0x1000
 
 config FLASHMAP_OFFSET
 	hex

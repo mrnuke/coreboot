@@ -1,0 +1,17 @@
+firmware 8M {
+
+        SI_HDR@0x0 4K {
+                SI_DESC 4K
+        }
+
+        # IBBL is a 32 kb code block that is initially loaded by CSE firmware and
+        # is placed in shared SRAM. That SRAM area is mapped in 4G-32K area of
+        # the host CPU. Reset vector is set as usual.
+        IBBL @ 0xba480  32K
+        IBBM @ 0xc2480
+        IBBR @ 0x381040
+        OBB  @ 0x3a3040 2048K {
+             FMAP 2K
+             COREBOOT(CBFS) 2046K
+        }
+ }

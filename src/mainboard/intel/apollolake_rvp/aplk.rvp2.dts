@@ -1,0 +1,13 @@
+firmware 8M {
+        SI_HDR@0x0 4K {
+                SI_DESC 4K
+        }
+
+        IBBL @ 0x6f480  32K
+        IBBM @ 0x77480
+        IBBR @ 0x3810c0
+        OBB  @ 0x3f10c0 384K {
+             FMAP 2K
+             COREBOOT(CBFS) 382K
+        }
+ }

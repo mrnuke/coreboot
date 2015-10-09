@@ -45,4 +45,16 @@ cpu_microcode_bins += /dev/null
 
 CPPFLAGS_common += -I$(src)/soc/intel/apollolake/include
 
+ifeq ($(CONFIG_USE_BLOBS),y)
+
+BLOB_DIR := 3rdparty/blobs/mainboard/$(CONFIG_MAINBOARD_DIR)
+SPI_FILE := $(call strip_quotes,$(BLOB_DIR)/$(CONFIG_PREBUILT_SPI_IMAGE))
+
+$(obj)/coreboot.pre: $(objcbfs)/romstage.elf $(obj)/coreboot.pre1 $(CBFSTOOL) $(objcbfs)/bootblock.bin
+	@cp $(SPI_FILE) $@
+	@echo injecting bootblock
+	@$(CBFSTOOL) $@ write -r IBBL -f $(objcbfs)/bootblock.bin -d
+
+endif
+
 endif
