@@ -10,6 +10,13 @@
  * (at your option) any later version.
  */
 
+#include <soc/gpio_defs.h>
+
+/* Definitions used only here, for getting the MMIO base of LPC pad registers */
+#define XLATE_LPC(pad)		((GPIO_SOUTHWEST << 16 ) | PAD_CFG_OFFSET(pad))
+#define PAD_MMIO_ADDR(pad)	(CONFIG_IOSF_BASE_ADDRESS + XLATE_LPC(pad))
+
+
 .intel_syntax noprefix
 .extern cache_as_ram
 
@@ -55,40 +62,26 @@ init_lpc_pad:
 
 	jmp	cache_as_ram
 
-/* FIXME: Find a better way to define these */
-
-#define LPC_CLKOUT0	0x118
-#define LPC_CLKOUT1	0x120
-#define LPC_AD0		0x128
-#define LPC_AD1		0x130
-#define LPC_AD2		0x138
-#define LPC_AD3		0x140
-#define LPC_CLKRUN	0x148
-#define LPC_FRAME	0x150
-
-#define XLATE_LPC(off)	((0xc0 << 16 ) | (0x500 + (off)))
-#define PAD_MMIO_ADDR(poff)	CONFIG_IOSF_BASE_ADDRESS + XLATE_LPC(poff)
-
 lpc_pad_params:
-	.long	PAD_MMIO_ADDR(LPC_CLKOUT0)
-	.long	0x44000400
-	.long	0x0003C000
 	.long	PAD_MMIO_ADDR(LPC_AD0)
-	.long	0x44000402
-	.long	0x0003F000
+	.long	PAD_CFG0_DEFAULT_NATIVE
+	.long	PAD_CFG1_DEFAULT_NATIVE
 	.long	PAD_MMIO_ADDR(LPC_AD1)
-	.long	0x44000402
-	.long	0x0003F000
+	.long	PAD_CFG0_DEFAULT_NATIVE
+	.long	PAD_CFG1_DEFAULT_NATIVE
 	.long	PAD_MMIO_ADDR(LPC_AD2)
-	.long	0x44000402
-	.long	0x0003F000
+	.long	PAD_CFG0_DEFAULT_NATIVE
+	.long	PAD_CFG1_DEFAULT_NATIVE
 	.long	PAD_MMIO_ADDR(LPC_AD3)
-	.long	0x44000402
-	.long	0x0003F000
-	.long	PAD_MMIO_ADDR(LPC_FRAME)
-	.long	0x44000400
-	.long	0x0003F000
+	.long	PAD_CFG0_DEFAULT_NATIVE
+	.long	PAD_CFG1_DEFAULT_NATIVE
+	.long	PAD_MMIO_ADDR(LPC_FRAMEB)
+	.long	PAD_CFG0_DEFAULT_NATIVE
+	.long	PAD_CFG1_DEFAULT_NATIVE
+	.long	PAD_MMIO_ADDR(LPC_CLKOUT0)
+	.long	PAD_CFG0_DEFAULT_NATIVE
+	.long	PAD_CFG1_DEFAULT_PULLUP
 	.long	PAD_MMIO_ADDR(LPC_CLKOUT1)
-	.long	0x44000400
-	.long	0x0003C000
+	.long	PAD_CFG0_DEFAULT_NATIVE
+	.long	PAD_CFG1_DEFAULT_PULLUP
 num_lpc_pads = ( . - lpc_pad_params) / 0xc
