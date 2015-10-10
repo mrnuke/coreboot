@@ -12,6 +12,8 @@
 ## GNU General Public License for more details.
 ##
 
+bootblock-y += bootblock_asm.S
+bootblock-y += bootblock.c
 ramstage-y += qemu.c
 subdirs-y += ../x86/mtrr
 subdirs-y += ../x86/lapic
