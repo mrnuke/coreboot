@@ -146,6 +146,9 @@ ifeq ($(CONFIG_SSE),y)
 bootblock_romccflags := -mcpu=k7 -msse -O2 -D__PRE_RAM__ -D__BOOTBLOCK__
 endif
 
+bootblock-y += memset.c
+bootblock-y += memcpy.c
+
 # This is a hack in case there are no per chipset linker files.
 $(objgenerated)/empty: build-dirs
 	touch $@

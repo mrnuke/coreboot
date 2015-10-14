@@ -13,6 +13,7 @@ bootblock-y += gpio.c
 bootblock-y += bootblock/cache_as_ram.S
 bootblock-y += bootblock/early_chipset_config.S
 bootblock-y += uart_early.c
+bootblock-y += mmap_boot.c
 
 romstage-y += cpu.c
 romstage-y += gpio.c
