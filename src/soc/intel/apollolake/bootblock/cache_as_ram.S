@@ -124,7 +124,7 @@ car_init_done:
 
 	/* Setup bootblock stack */
 	mov	esp, CONFIG_DCACHE_RAM_BASE
-	add 	esp, CONFIG_DCACHE_RAM_BOOTBLOCK_STACK_SIZE
+	add	esp, CONFIG_DCACHE_RAM_BOOTBLOCK_STACK_SIZE - 4
 
 	/* Make sure CAR region is executable */
 	mov	ecx, 0x120
