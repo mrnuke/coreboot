@@ -104,15 +104,11 @@ clear_var_mtrr:
 
 	post_code(0x26)
 
-	/* Write something to each cache line */
-	mov	eax, 0xcafebabe
+	/* Clear the cache memory region. This will also fill up the cache */
 	mov	edi, CONFIG_DCACHE_RAM_BASE
-	mov	ecx, (0x80000 >> 6)
-cache_init_loop:
-	mov	[edi], eax
-	sfence
-	add	edi, 64
-	loop cache_init_loop
+	mov	ecx, CONFIG_DCACHE_RAM_SIZE >> 2
+	xor	eax, eax
+	rep	stos dword ptr es:[edi], eax
 
 	post_code(0x27)
 
