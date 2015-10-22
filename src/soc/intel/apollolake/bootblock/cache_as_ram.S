@@ -135,9 +135,8 @@ car_init_done:
 before_carstage:
 	post_code(0x2b)
 
-	/* Call romstage.c main function. */
-	push .halt_forever	/* In case bootblock_car_main returns */
-	jmp bootblock_car_main
+	/* Call bootblock C environment main function. */
+	call bootblock_car_main
 
 	/* Never reached */
 
