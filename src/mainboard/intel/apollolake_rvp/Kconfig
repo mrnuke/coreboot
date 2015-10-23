@@ -20,7 +20,8 @@ config MAINBOARD_VENDOR
 
 config FMAP_FILE
 	string
-	default aplk.rvp
+	default aplk.rvp1 if BOARD_INTEL_APOLLOLAKE_RVP1
+	default aplk.rvp2 if BOARD_INTEL_APOLLOLAKE_RVP2
 
 config PREBUILT_SPI_IMAGE
 	string
