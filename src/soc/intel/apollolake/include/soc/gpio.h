@@ -17,9 +17,8 @@
 #include <soc/gpio_defs.h>
 
 struct pad_config {
-	uint8_t community;
-	uint8_t pad;
 	uint32_t config[2];
+	uint16_t pad;
 };
 
 /*

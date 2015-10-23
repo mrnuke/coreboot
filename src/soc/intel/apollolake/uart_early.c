@@ -17,16 +17,13 @@
 
 static const struct pad_config uart_tx_pad_configs[] = {
 	{
-		.community = GPIO_NORTH,
-		.pad = 39,
+		.pad = GPIO_39,
 		.config = {PAD_CFG0_DEFAULT_FUNC(1), PAD_CFG1_DEFAULT_NATIVE},
 	}, {
-		.community = GPIO_NORTH,
-		.pad = 42,
+		.pad = GPIO_42,
 		.config = {PAD_CFG0_DEFAULT_FUNC(1), PAD_CFG1_DEFAULT_NATIVE},
 	}, {
-		.community = GPIO_NORTH,
-		.pad = 47,
+		.pad = GPIO_47,
 		.config = {PAD_CFG0_DEFAULT_FUNC(1), PAD_CFG1_DEFAULT_NATIVE},
 	},
 };

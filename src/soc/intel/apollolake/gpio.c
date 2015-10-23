@@ -13,9 +13,39 @@
 #include <soc/gpio.h>
 #include <soc/iosf.h>
 
+/* This list must be in order, from highest pad numbers, to lowest pad numbers*/
+static const struct pad_community {
+	uint16_t first_pad;
+	uint8_t port;
+} gpio_communities[] = {
+	{
+		.port = GPIO_SOUTHWEST,
+		.first_pad = SW_OFFSET,
+	}, {
+		.port = GPIO_WEST,
+		.first_pad = W_OFFSET,
+	}, {
+		.port = GPIO_NORTHWEST,
+		.first_pad = NW_OFFSET,
+	}, {
+		.port = GPIO_NORTH,
+		.first_pad = 0,
+	}
+};
+
+static const struct pad_community *gpio_get_community(uint16_t pad)
+{
+	const struct pad_community *map = gpio_communities;
+
+	while (map->first_pad > pad)
+		map++;
+
+	return map;
+}
 void gpio_configure_pad(const struct pad_config *cfg)
 {
-	uint16_t config_offset = PAD_CFG_OFFSET(cfg->pad);
-	iosf_write(cfg->community, config_offset, cfg->config[0]);
-	iosf_write(cfg->community, config_offset + 4, cfg->config[1]);
+	const struct pad_community *comm = gpio_get_community(cfg->pad);
+	uint16_t config_offset = PAD_CFG_OFFSET(cfg->pad - comm->first_pad);
+	iosf_write(comm->port, config_offset, cfg->config[0]);
+	iosf_write(comm->port, config_offset + 4, cfg->config[1]);
 }
