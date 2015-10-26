@@ -16,8 +16,37 @@
 #include <types.h>
 #include <soc/gpio_defs.h>
 
+#define PAD_FUNC(value)		PAD_CFG0_MODE_##value
+#define PAD_RESET(value)	PAD_CFG0_RESET_##value
+#define PAD_PULL(value)		PAD_CFG1_PULL_##value
+
+#define _PAD_CFG_STRUCT(__pad, __config0, __config1)	\
+	{					\
+		.pad = __pad,			\
+		.config0 = __config0,		\
+		.config1 = __config1,		\
+	}
+
+/* Native function configuration */
+#define PAD_CFG_NF(pad, pull, rst, func) \
+	_PAD_CFG_STRUCT(pad, PAD_RESET(rst) | PAD_FUNC(func), PAD_PULL(pull))
+
+/* General purpose output, no pullup/down. */
+#define PAD_CFG_GPO(pad, val, rst)	\
+	_PAD_CFG_STRUCT(pad,		\
+		PAD_FUNC(GPIO) | PAD_RESET(rst) | PAD_CFG0_RX_DISABLE | !!val, \
+		PAD_PULL(NONE))
+
+/* General purpose input */
+#define PAD_CFG_GPI(pad, pull, rst) \
+	_PAD_CFG_STRUCT(pad,		\
+		PAD_FUNC(GPIO) | PAD_RESET(rst) | PAD_CFG0_TX_DISABLE, \
+		PAD_PULL(pull))
+
+
 struct pad_config {
-	uint32_t config[2];
+	uint32_t config0;
+	uint16_t config1;
 	uint16_t pad;
 };
 

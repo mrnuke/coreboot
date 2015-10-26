@@ -16,16 +16,9 @@
 #include <soc/uart.h>
 
 static const struct pad_config uart_tx_pad_configs[] = {
-	{
-		.pad = GPIO_39,
-		.config = {PAD_CFG0_DEFAULT_FUNC(1), PAD_CFG1_DEFAULT_NATIVE},
-	}, {
-		.pad = GPIO_42,
-		.config = {PAD_CFG0_DEFAULT_FUNC(1), PAD_CFG1_DEFAULT_NATIVE},
-	}, {
-		.pad = GPIO_47,
-		.config = {PAD_CFG0_DEFAULT_FUNC(1), PAD_CFG1_DEFAULT_NATIVE},
-	},
+	PAD_CFG_NF(GPIO_39, NATIVE, DEEP, NF1),	/* UART0 TX*/
+	PAD_CFG_NF(GPIO_42, NATIVE, DEEP, NF1),	/* UART1 TX*/
+	PAD_CFG_NF(GPIO_47, NATIVE, DEEP, NF1),	/* UART2 TX*/
 };
 
 static void lpss_uart_write(uint16_t reg, uint32_t val)

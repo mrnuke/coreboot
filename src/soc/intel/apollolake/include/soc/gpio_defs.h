@@ -23,6 +23,9 @@
 #define PAD_CFG0_MODE_MASK		(7 << 10)
 #define  PAD_CFG0_MODE_GPIO		(0 << 10)
 #define  PAD_CFG0_MODE_FUNC(x)		((x) << 10)
+#define  PAD_CFG0_MODE_NF1		(1 << 10)
+#define  PAD_CFG0_MODE_NF2		(2 << 10)
+#define  PAD_CFG0_MODE_NF3		(3 << 10)
 #define PAD_CFG0_ROUTE_NMI		(1 << 17)
 #define PAD_CFG0_ROUTE_SMI		(1 << 18)
 #define PAD_CFG0_ROUTE_SCI		(1 << 19)
@@ -34,10 +37,10 @@
 #define  PAD_CFG0_TRIG_OFF		(2 << 25)
 #define  PAD_CFG0_TRIG_EDGE_BOTH	(3 << 25)
 #define PAD_CFG0_RESET_MASK		(3 << 30)
-#define  PAD_CFG0_RESET_STICKY		(0 << 30)
+#define  PAD_CFG0_RESET_PWROK		(0 << 30)
 #define  PAD_CFG0_RESET_DEEP		(1 << 30)
-#define  PAD_CFG0_RESET_GPIOR		(2 << 30)
-#define  PAD_CFG0_RESET_INACTIVE	(3 << 30)
+#define  PAD_CFG0_RESET_PLTRST		(2 << 30)
+#define  PAD_CFG0_RESET_RSMRST		(3 << 30)
 
 #define PAD_CFG1_PULL_MASK		(0xf << 12)
 #define  PAD_CFG1_PULL_NONE		(0x0 << 12)
@@ -323,11 +326,10 @@
 #define PAD_SW(pad)			(pad - SW_OFFSET)
 
 /* Default configurations */
-#define PAD_CFG0_DEFAULT_FUNC(x)	(0x44000000 | PAD_CFG0_MODE_FUNC(x))
+#define PAD_CFG0_DEFAULT_FUNC(x)	(PAD_CFG0_RESET_DEEP | PAD_CFG0_MODE_FUNC(x))
 #define PAD_CFG0_DEFAULT_NATIVE		PAD_CFG0_DEFAULT_FUNC(1)
 
-#define PAD_CFG1_DEFAULT_NOPULL		PAD_CFG1_PULL_NONE
 #define PAD_CFG1_DEFAULT_PULLUP		PAD_CFG1_PULL_UP_20K
-#define PAD_CFG1_DEFAULT_NATIVE			PAD_CFG1_PULL_NATIVE
+#define PAD_CFG1_DEFAULT_NATIVE		PAD_CFG1_PULL_NATIVE
 
 #endif /* _SOC_APOLLOLAKE_GPIO_DEFS_H_ */
