@@ -56,5 +56,6 @@ struct pad_config {
  * pad configuration functionality.
  */
 void gpio_configure_pad(const struct pad_config *cfg);
+void gpio_configure_pads(const struct pad_config *cfg, size_t num_pads);
 
 #endif /* _SOC_APOLLOLAKE_GPIO_H_ */

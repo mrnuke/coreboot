@@ -42,10 +42,17 @@ static const struct pad_community *gpio_get_community(uint16_t pad)
 
 	return map;
 }
+
 void gpio_configure_pad(const struct pad_config *cfg)
 {
 	const struct pad_community *comm = gpio_get_community(cfg->pad);
 	uint16_t config_offset = PAD_CFG_OFFSET(cfg->pad - comm->first_pad);
 	iosf_write(comm->port, config_offset, cfg->config0);
 	iosf_write(comm->port, config_offset + 4, cfg->config1);
+}
+
+void gpio_configure_pads(const struct pad_config *cfg, size_t num_pads)
+{
+	while (num_pads--)
+		gpio_configure_pad(cfg + num_pads);
 }
