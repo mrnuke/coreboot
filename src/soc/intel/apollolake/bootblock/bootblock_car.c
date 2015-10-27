@@ -11,9 +11,11 @@
  */
 
 #include <arch/io.h>
+#include <cbfs.h>
 #include <console/console.h>
 #include <device/pci.h>
 #include <soc/bootblock.h>
+#include <soc/cpu.h>
 #include <soc/uart.h>
 
 static void disable_watchdog(void)
@@ -32,8 +34,18 @@ static void disable_watchdog(void)
 	outl(reg, 0x400 + 0x68);
 }
 
+static void call_romstage(void *entry)
+{
+	__asm__ volatile (
+		"call *%0"
+		:: "r" (entry)
+	);
+}
+
 void bootblock_car_main(void)
 {
+	void *romstage_entry;
+
 	/* Quick post code to show we made it to C code */
 	outb(0x30, 0x80);
 
@@ -45,7 +57,15 @@ void bootblock_car_main(void)
 	/* Wait until after we have console to disable this */
 	disable_watchdog();
 
-	/* Don't return, so we see the above post code */
-	while (1)
-		;
+	romstage_entry = cbfs_boot_load_stage_by_name("fallback/romstage");
+	if (!romstage_entry)
+		die("romstage not found\n");
+
+	/* APLK workaround: do this magic to keep cache executable on update */
+	bxt_remark_cache_exec();
+
+	/* Call the romstage entry point */
+	call_romstage(romstage_entry);
+
+	/* We should never reach this */
 }
