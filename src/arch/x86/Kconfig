@@ -77,6 +77,12 @@ config RAMBASE
 	hex
 	default 0x100000
 
+# This indicates the boot media is mapped at top of 4G. This variable is used
+# to decide whether to pull in the default mmap_boot.c implementation.
+config X86_TOP4G_BOOTMEDIA_MAP
+	bool
+	default y
+
 # This is something you almost certainly don't want to mess with.
 # How many SIPIs do we send when starting up APs and cores?
 # The answer in 2000 or so was '2'. Nowadays, on many systems,

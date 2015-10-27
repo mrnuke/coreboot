@@ -107,7 +107,7 @@ CFLAGS_bootblock+=-Wa,--divide
 bootblock-y += boot.c
 bootblock-y += memcpy.c
 bootblock-y += memset.c
-bootblock-y += mmap_boot.c
+bootblock-$(CONFIG_X86_TOP4G_BOOTMEDIA_MAP) += mmap_boot.c
 
 # Add the assembly file that pulls in the rest of the dependencies in
 # the right order. Make sure the auto generated bootblock.inc is a proper
@@ -362,7 +362,7 @@ romstage-$(CONFIG_ARCH_RAMSTAGE_X86_32) += cpu_common.c
 romstage-y += memset.c
 romstage-y += memcpy.c
 romstage-y += memmove.c
-romstage-y += mmap_boot.c
+romstage-$(CONFIG_X86_TOP4G_BOOTMEDIA_MAP) += mmap_boot.c
 
 romstage-$(CONFIG_COLLECT_TIMESTAMPS) += timestamp.c
 
@@ -392,7 +392,7 @@ ramstage-y += memset.c
 ramstage-y += memcpy.c
 ramstage-y += memmove.c
 ramstage-y += ebda.c
-ramstage-y += mmap_boot.c
+ramstage-$(CONFIG_X86_TOP4G_BOOTMEDIA_MAP) += mmap_boot.c
 ramstage-$(CONFIG_COOP_MULTITASKING) += thread.c
 ramstage-$(CONFIG_COOP_MULTITASKING) += thread_switch.S
 ramstage-$(CONFIG_COLLECT_TIMESTAMPS) += timestamp.c
@@ -400,7 +400,7 @@ ramstage-$(CONFIG_COLLECT_TIMESTAMPS) += timestamp.c
 smm-y += memset.c
 smm-y += memcpy.c
 smm-y += memmove.c
-smm-y += mmap_boot.c
+smm-$(CONFIG_X86_TOP4G_BOOTMEDIA_MAP) += mmap_boot.c
 
 ifeq ($(CONFIG_ARCH_RAMSTAGE_X86_32),y)
 rmodules_x86_32-y += memset.c
