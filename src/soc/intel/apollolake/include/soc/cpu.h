@@ -13,8 +13,21 @@
 #ifndef _SOC_APOLLOLAKE_CPU_H_
 #define _SOC_APOLLOLAKE_CPU_H_
 
+#include <cpu/x86/msr.h>
+
 #define MSR_PLATFORM_INFO	0xce
 
 #define BASE_CLOCK_MHZ		100
+
+/*
+ * Remark the cache as executable. This works around a silicon bug where
+ * updating a cache line makes it non-executable.
+ */
+static inline void bxt_remark_cache_exec(void)
+{
+	msr_t msr = rdmsr(0x120);
+	msr.lo |= (1 << 8);
+	wrmsr(0x120, msr);
+}
 
 #endif /* _SOC_APOLLOLAKE_CPU_H_ */
