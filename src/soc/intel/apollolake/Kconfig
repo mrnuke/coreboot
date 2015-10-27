@@ -34,6 +34,10 @@ config CPU_SPECIFIC_OPTIONS
 	select UDELAY_TSC
 	select TSC_CONSTANT_RATE
 
+config X86_TOP4G_BOOTMEDIA_MAP
+	bool
+	default n
+
 config MMCONF_BASE_ADDRESS
 	hex "PCI MMIO Base Address"
 	default 0xe0000000
