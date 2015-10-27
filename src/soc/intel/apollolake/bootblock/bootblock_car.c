@@ -16,6 +16,7 @@
 #include <device/pci.h>
 #include <soc/bootblock.h>
 #include <soc/cpu.h>
+#include <soc/iomap.h>
 #include <soc/uart.h>
 
 static void disable_watchdog(void)
@@ -24,14 +25,14 @@ static void disable_watchdog(void)
 	device_t dev = PCI_DEV(0, 0xd, 1);
 
 	/* Open up an IO window */
-	pci_write_config16(dev, PCI_BASE_ADDRESS_4, 0x400);
+	pci_write_config16(dev, PCI_BASE_ADDRESS_4, ACPI_PMIO_BASE);
 	pci_write_config32(dev, PCI_COMMAND,
 			   PCI_COMMAND_MASTER | PCI_COMMAND_IO);
 
 	/* We don't have documentation for this bit, but it prevents reboots */
-	reg = inl(0x400 + 0x68);
+	reg = inl(ACPI_PMIO_BASE + 0x68);
 	reg |= 1 << 11;
-	outl(reg, 0x400 + 0x68);
+	outl(reg, ACPI_PMIO_BASE + 0x68);
 }
 
 static void call_romstage(void *entry)
