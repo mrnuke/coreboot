@@ -1,0 +1,56 @@
+config PLATFORM_USES_FSP2_0
+	bool
+	help
+	  Include FSP 2.0 wrappers and functionality
+
+if PLATFORM_USES_FSP2_0
+
+comment "Intel FSP 2.0"
+
+config ADD_FSP_BINARIES
+	bool "Add Intel FSP 2.0 binaries to CBFS"
+	help
+	  Add the FSP-M and FSP-S binaries to CBFS. Note that coreboot does not
+	  use the FSP-T binary, so that will not be included.
+
+if ADD_FSP_BINARIES
+
+config FSP_M_FILE
+	string "Intel FSP-M (memory init) binary path and filename"
+	help
+	  The path and filename of the Intel FSP-M binary for this platform.
+
+config FSP_S_FILE
+	string "Intel FSP-S (silicon init) binary path and filename"
+	help
+	  The path and filename of the Intel FSP-S binary for this platform.
+
+endif # ADD_FSP_BINARIES
+
+# Cache As RAM region layout:
+#
+# +-------------+ DCACHE_RAM_BASE + DCACHE_RAM_SIZE    [0xfef80000]
+# |             |
+# |   FSP-M     |
+# |   code      |
+# |             |
+# +-------------+ FSP-M                                [0xfef30000]
+# |  romstage   |
+# |    code     |
+# +-------------+ ROMSTAGE_CAR_ADDR                    [0xfef28000]
+# |  FIT TABLE  |
+# +-------------+ FIT_CAR_ADDR                         [0xfef27c00]
+# |   FSP-M     |
+# | stack/data  |
+# +-------------+ DCACHE_RAM_BASE + 0x4000             [0xfef04000]
+# |  Stack      |
+# |    |        |
+# |    v        |
+# +-------------+
+# |    ^        |
+# |    |        |
+# | CAR Globals |
+# +-------------+ DCACHE_RAM_BASE                      [0xfef00000]
+
+
+endif # PLATFORM_USES_FSP2_0
