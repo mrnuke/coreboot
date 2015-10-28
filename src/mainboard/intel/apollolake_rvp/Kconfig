@@ -17,7 +17,7 @@ config MAINBOARD_VENDOR
 	string
 	default "Intel"
 
-config IFD_BIOS_SIZE
+config IFD_BIOS_END
 	hex
 	default 0x700000
 
