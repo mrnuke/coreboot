@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2015 Intel Corp.
  * (Written by Andrey Petrov <andrey.petrov@intel.com> for Intel Corp.)
+ * (Written by Alexandru Gagniuc <alexandrux.gagniuc@intel.com> for Intel Corp.)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,31 +12,38 @@
  */
 
 #include <boot_device.h>
-#include <console/console.h>
 #include <cbfs.h>
-#include <endian.h>
-#include <stdlib.h>
 #include <commonlib/region.h>
+#include <console/console.h>
 #include <fmap.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* The 256 KiB right below 4G are decoded by readonly SRAM, not boot media */
+#define IFD_BIOS_MAX_MAPPED	(CONFIG_IFD_BIOS_END - 256 * KiB)
+#define IFD_MAPPED_SIZE		(IFD_BIOS_MAX_MAPPED - CONFIG_IFD_BIOS_START)
+#define IFD_BIOS_SIZE		(CONFIG_IFD_BIOS_END - CONFIG_IFD_BIOS_START)
 
 /*
  *  If Apollo Lake is configured to boot from SPI flash "BIOS" region
  *  (as defined in descriptor) is mapped below 4GiB.  Form a pointer for
  *  the base.
  */
-#define ROM_BASE ((void *)(uintptr_t)(0x100000000ULL - CONFIG_IFD_BIOS_SIZE))
+#define VIRTUAL_ROM_BASE ((uintptr_t)(0x100000000ULL - IFD_BIOS_SIZE))
 
-static const struct mem_region_device boot_dev = {
-	.base = (void *) ROM_BASE,
-	/* typically not whole flash is memory mapped */
-	.rdev = REGION_DEV_INIT(&mem_rdev_ops, CONFIG_IFD_BIOS_START,
-							CONFIG_IFD_BIOS_SIZE)
-};
+static const struct mem_region_device shadow_dev = MEM_REGION_DEV_INIT(
+	VIRTUAL_ROM_BASE, IFD_BIOS_MAX_MAPPED
+);
+
+static const struct xlate_region_device real_dev = XLATE_REGION_INIT(
+		&shadow_dev.rdev, CONFIG_IFD_BIOS_START,
+		IFD_MAPPED_SIZE, CONFIG_ROM_SIZE
+);
 
 const struct region_device *boot_device_ro(void)
 {
-	return &boot_dev.rdev;
-}
+	return &real_dev.rdev;
+};
 
 static int iafw_boot_region_properties(struct cbfs_props *props)
 {
