@@ -15,6 +15,7 @@
 #include <console/console.h>
 #include <cpu/x86/msr.h>
 #include <device/pci_def.h>
+#include <fsp/api.h>
 #include <soc/iomap.h>
 #include <soc/romstage.h>
 #include <soc/uart.h>
@@ -61,6 +62,8 @@ asmlinkage void romstage_entry(void)
 	printk(BIOS_DEBUG, "Starting romstage...\n");
 
 	soc_early_romstage_init();
+
+	fsp_memory_init();
 
 	/* This function must not return */
 	while(1)
