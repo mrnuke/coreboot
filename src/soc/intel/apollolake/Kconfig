@@ -16,14 +16,10 @@ config CPU_SPECIFIC_OPTIONS
 	select SMP
 	select SSE2
 	select SUPPORT_CPU_UCODE_IN_CBFS
-	# Whatever bits we can salvage from intel/common
-	select SOC_INTEL_COMMON
-	select SOC_INTEL_COMMON_RESET
 	# Misc options
 	select C_ENVIRONMENT_BOOTBLOCK
 	select COLLECT_TIMESTAMPS
 	select DRIVERS_UART_8250MEM_32
-	select HAVE_HARD_RESET
 	select HAVE_INTEL_FIRMWARE
 	select MMCONF_SUPPORT
 	select MMCONF_SUPPORT_DEFAULT
@@ -33,9 +29,9 @@ config CPU_SPECIFIC_OPTIONS
 	select PCIEXP_CLK_PM
 	select PCIEXP_L1_SUB_STATE
 	select REG_SCRIPT
+	select SOC_INTEL_COMMON
 	select UDELAY_TSC
 	select TSC_CONSTANT_RATE
-	select PLATFORM_USES_FSP2_0
 
 config X86_TOP4G_BOOTMEDIA_MAP
 	bool
@@ -60,7 +56,7 @@ config DCACHE_RAM_BASE
 
 config DCACHE_RAM_SIZE
 	hex "Length in bytes of cache-as-RAM"
-	default 0x100000
+	default 0x80000
 	help
 	  The size of the cache-as-ram region required during bootblock
 	  and/or romstage.

@@ -45,6 +45,12 @@ cpu_microcode_bins += /dev/null
 
 CPPFLAGS_common += -I$(src)/soc/intel/apollolake/include
 
+# This is a temporary workaround for properly linking romstage into CAR
+# It works because:
+#     1) .text is the first section of romstage, and all others follow after
+#     2) We override default CBFS rule for romstage, so it doesn't get relocated
+LDFLAGS_romstage += -Ttext=$(CONFIG_ROMSTAGE_CAR_ADDR)
+
 ifeq ($(CONFIG_USE_BLOBS),y)
 
 BLOB_DIR := 3rdparty/blobs/mainboard/$(CONFIG_MAINBOARD_DIR)
