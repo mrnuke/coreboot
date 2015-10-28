@@ -15,9 +15,11 @@ bootblock-y += bootblock/early_chipset_config.S
 bootblock-y += mmap_boot.c
 bootblock-y += uart_early.c
 
+cpu_incs-y += $(src)/soc/intel/apollolake/romstage/entry.inc
 romstage-y += cpu.c
 romstage-y += gpio.c
 romstage-y += mmap_boot.c
+romstage-y += romstage/romstage.c
 romstage-y += uart_early.c
 
 ramstage-y += cpu.c
