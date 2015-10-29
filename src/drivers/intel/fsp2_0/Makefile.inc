@@ -1,5 +1,6 @@
 
 romstage-y += util.c
+romstage-y += memory_init.c
 
 CPPFLAGS_common += -I$(src)/drivers/intel/fsp2_0/include
 

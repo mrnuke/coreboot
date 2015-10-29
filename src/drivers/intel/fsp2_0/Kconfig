@@ -27,6 +27,10 @@ config FSP_S_FILE
 
 endif # ADD_FSP_BINARIES
 
+config FIT_CAR_ADDR
+	hex
+	default 0xfef27c00
+
 # Cache As RAM region layout:
 #
 # +-------------+ DCACHE_RAM_BASE + DCACHE_RAM_SIZE    [0xfef80000]
