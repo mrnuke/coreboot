@@ -1,4 +1,6 @@
 
+romstage-y += util.c
+
 CPPFLAGS_common += -I$(src)/drivers/intel/fsp2_0/include
 
 cbfs-files-$(CONFIG_ADD_FSP_BINARIES) += blobs/fsp-m.bin
