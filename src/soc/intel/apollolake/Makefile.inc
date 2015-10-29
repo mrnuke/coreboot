@@ -57,13 +57,18 @@ BLOB_DIR := 3rdparty/blobs/mainboard/$(CONFIG_MAINBOARD_DIR)
 SPI_FILE := $(call strip_quotes,$(BLOB_DIR)/$(CONFIG_PREBUILT_SPI_IMAGE))
 
 $(obj)/coreboot.pre: $(objcbfs)/romstage.elf $(obj)/coreboot.pre1 $(CBFSTOOL) \
-		     $(objcbfs)/bootblock.bin $(objcbfs)/romstage.elf
+		     $(objcbfs)/bootblock.bin $(objcbfs)/romstage.elf \
+		     $$(prebuilt-files)
 	@cp $(SPI_FILE) $@
 	@echo injecting bootblock
 	@$(CBFSTOOL) $@ write -r IBBL -f $(objcbfs)/bootblock.bin -d
 	@printf "    CBFS       $(CONFIG_CBFS_PREFIX)/romstage\n"
 	@$(CBFSTOOL) $@ add-stage -f $(objcbfs)/romstage.elf \
 		-n $(CONFIG_CBFS_PREFIX)/romstage
+	mv $@ $@.tmp
+	$(prebuild-files) true
+	mv $@.tmp $@
+
 endif
 
 endif
