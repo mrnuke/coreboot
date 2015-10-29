@@ -32,8 +32,8 @@ static void soc_early_romstage_init(void)
 	msr_t msr;
 	device_t pmc = PCI_DEV(0, 13, 1);
 
-	/* Set MCH base address */
-	pci_write_config32(PCI_DEV(0, 0, 0), 0x48, MCH_BASE_ADDR);
+	/* Set MCH base address and enable bit */
+	pci_write_config32(PCI_DEV(0, 0, 0), 0x48, MCH_BASE_ADDR | 1);
 
 	/* Set PMC base address */
 	pci_write_config32(pmc, PCI_BASE_ADDRESS_0, PMC_BAR0);
