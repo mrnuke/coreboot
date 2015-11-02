@@ -12,6 +12,8 @@
  */
 
 #include <arch/io.h>
+#include <cbfs.h>
+#include <cbmem.h>
 #include <console/console.h>
 #include <cpu/x86/msr.h>
 #include <device/pci_def.h>
@@ -51,7 +53,26 @@ static void soc_early_romstage_init(void)
 	pci_write_config32(PCI_DEV(0, 13, 0), 0x60, 1<<7);
 }
 
-asmlinkage void romstage_entry(void)
+static void *alloc_stack_in_ram(void)
+{
+	uint8_t *ram_stack = cbmem_add(CBMEM_ID_ROMSTAGE_RAM_STACK,
+				    CONFIG_ROMSTAGE_RAM_STACK_SIZE);
+
+	/*
+	 * If cbmem fails to give us a memory window, try to get a stack at
+	 * 2 MiB, and hope we can go forward. The 2 MiB address is arbitrary.
+	 */
+	if (ram_stack == NULL) {
+		printk(BIOS_ALERT, "Could not find place for stack\n");
+		return (void *)(2 * MiB);
+	}
+
+	/* The initial stack pointer should point at the top of the region */
+	ram_stack += CONFIG_ROMSTAGE_RAM_STACK_SIZE - sizeof(size_t);
+	return ram_stack;
+}
+
+asmlinkage void* romstage_entry(void)
 {
 	/* Be careful. Bootblock might already have initialized the console */
 	if (!IS_ENABLED(CONFIG_BOOTBLOCK_CONSOLE)) {
@@ -65,7 +86,11 @@ asmlinkage void romstage_entry(void)
 
 	fsp_memory_init();
 
-	/* This function must not return */
-	while(1)
-		;
+	cbmem_initialize_empty();
+	return alloc_stack_in_ram();
+}
+
+asmlinkage void romstage_after_raminit(void)
+{
+	run_ramstage();
 }

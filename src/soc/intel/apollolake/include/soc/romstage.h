@@ -15,6 +15,7 @@
 
 #include <arch/cpu.h>
 
-asmlinkage void romstage_entry(void);
+asmlinkage void *romstage_entry(void);
+asmlinkage void romstage_after_raminit(void);
 
 #endif /* _SOC_APOLLOLAKE_ROMSTAGE_H_ */

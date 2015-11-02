@@ -69,6 +69,16 @@ config DCACHE_RAM_BOOTBLOCK_STACK_SIZE
 	  The amount of anticipated stack usage from the bootblock during
 	  pre-romstage initialization.
 
+config ROMSTAGE_RAM_STACK_SIZE
+	hex
+	default 0x5000
+	help
+	   The size of the romstage stack after memory is available. Because CAR
+	   space is very crowded, only a very limited part of CAR is available
+	   for stack. More than that is needed to decompress ramstage. This
+	   variable indicates how much RAM to reserve for the stack after
+	   raminit. The stack is automatically switched after romstage_main().
+
 config IFD_BIOS_START
 	hex
 	default 0x1000
