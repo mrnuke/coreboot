@@ -56,7 +56,7 @@ enum cb_err fsp_identify(struct fsp_header *hdr, const void *fsp_blob)
 
 void fsp_print_header_info(const struct fsp_header *hdr)
 {
-	printk(BIOS_DEBUG, "Revision %u, image ID: %s, base 0x%zx + 0x%zx\n",
+	printk(BIOS_DEBUG, "Revision %u, image ID: %s, base 0x%lx + 0x%zx\n",
 	       hdr->revision ,hdr->image_id, hdr->image_base, hdr->image_size);
 
 	printk(BIOS_DEBUG, "\tConfig region        0x%zx + 0x%zx\n",
