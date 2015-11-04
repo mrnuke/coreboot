@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2015 Intel Corp.
  * (Written by Alexandru Gagniuc <alexandrux.gagniuc@intel.com> for Intel Corp.)
+ * (Written by Andrey Petrov <andrey.petrov@intel.com> for Intel Corp.)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +12,9 @@
  */
 
 #include <arch/io.h>
+#include <cbfs.h>
 #include <console/console.h>
-#include <fsp/info_header.h>
+#include <fsp/util.h>
 #include <lib.h>
 #include <string.h>
 
@@ -67,4 +69,34 @@ void fsp_print_header_info(const struct fsp_header *hdr)
 	       hdr->memory_init_entry_offset,
 	       hdr->silicon_init_entry_offset,
 	       hdr->notify_phase_entry_offset);
+}
+
+enum cb_err fsp_load_binary(struct fsp_header *hdr, const char *name)
+{
+	struct cbfsf file_desc;
+	struct region_device file_data;
+	size_t fsp_load_size;
+	void *membase;
+
+	if (cbfs_boot_locate(&file_desc, name, NULL)) {
+		printk(BIOS_ERR, "Could not locate %s in CBFS\n", name);
+		return CB_ERR;
+	}
+
+	cbfs_file_data(&file_data, &file_desc);
+
+	/* Map just enough of the file to be able to parse the header. */
+	membase = rdev_mmap(&file_data, 0, FSP_HDR_OFFSET + FSP_HDR_LEN);
+	if (fsp_identify(hdr, membase) != CB_SUCCESS) {
+		printk(BIOS_ERR, "%s did not have a valid FSP header\n", name);
+		return CB_ERR;
+	}
+
+	fsp_print_header_info(hdr);
+
+	/* Load binary into memory. */
+	fsp_load_size = MIN(hdr->image_size, file_data.region.size);
+	rdev_readat(&file_data, (void *)hdr->image_base, 0, fsp_load_size);
+
+	return CB_SUCCESS;
 }
