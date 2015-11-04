@@ -13,6 +13,7 @@
 #ifndef _FSP2_0_API_H_
 #define _FSP2_0_API_H_
 
+#include <stddef.h>
 #include "FspUpdVpd.h"
 
 enum fsp_status {
