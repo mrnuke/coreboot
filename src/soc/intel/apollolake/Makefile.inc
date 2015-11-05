@@ -8,26 +8,26 @@ subdirs-y += ../../../cpu/x86/smm
 subdirs-y += ../../../cpu/x86/tsc
 
 bootblock-y += bootblock/bootblock_car.c
-bootblock-y += cpu.c
 bootblock-y += gpio.c
 bootblock-y += bootblock/cache_as_ram.S
 bootblock-y += bootblock/early_chipset_config.S
 bootblock-y += mmap_boot.c
+bootblock-y += tsc_freq.c
 bootblock-y += uart_early.c
 
 cpu_incs-y += $(src)/soc/intel/apollolake/romstage/entry.inc
-romstage-y += cpu.c
 romstage-y += gpio.c
 romstage-y += memmap.c
 romstage-y += mmap_boot.c
 romstage-y += romstage/romstage.c
+romstage-y += tsc_freq.c
 romstage-y += uart_early.c
 
 ramstage-y += chip.c
-ramstage-y += cpu.c
 ramstage-y += gpio.c
 ramstage-y += memmap.c
 ramstage-y += mmap_boot.c
+ramstage-y += tsc_freq.c
 ramstage-y += uart.c
 
 romstage-y += placeholders.c
