@@ -23,6 +23,7 @@ romstage-y += mmap_boot.c
 romstage-y += romstage/romstage.c
 romstage-y += uart_early.c
 
+ramstage-y += chip.c
 ramstage-y += cpu.c
 ramstage-y += gpio.c
 ramstage-y += memmap.c
