@@ -18,6 +18,8 @@
 #include <cpu/x86/msr.h>
 #include <device/pci_def.h>
 #include <fsp/api.h>
+#include <fsp/util.h>
+#include <device/resource.h>
 #include <soc/iomap.h>
 #include <soc/romstage.h>
 #include <soc/uart.h>
@@ -75,6 +77,8 @@ static void *alloc_stack_in_ram(void)
 asmlinkage void* romstage_entry(void)
 {
 	void *hob_list_ptr;
+	struct resource fsp_mem;
+
 	/* Be careful. Bootblock might already have initialized the console */
 	if (!IS_ENABLED(CONFIG_BOOTBLOCK_CONSOLE)) {
 		lpss_console_uart_init();
@@ -87,7 +91,16 @@ asmlinkage void* romstage_entry(void)
 
 	fsp_memory_init(&hob_list_ptr);
 
-	cbmem_initialize_empty();
+	fsp_find_reserved_memory(&fsp_mem, hob_list_ptr);
+
+	/* initialize cbmem by adding FSP reserved memory first thing */
+	cbmem_initialize_empty_id_size(CBMEM_ID_FSP_RESERVED_MEMORY,
+					fsp_mem.size);
+
+	/* make sure FSP memory is reserved in cbmem */
+	if (fsp_mem.base != (uintptr_t)cbmem_find(CBMEM_ID_FSP_RESERVED_MEMORY))
+		die("Failed to accommodate FSP reserved memory request");
+
 	return alloc_stack_in_ram();
 }
 
