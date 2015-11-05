@@ -15,6 +15,8 @@
 
 #include <cpu/x86/msr.h>
 
+#define CPUID_APOLLOLAKE_A0	0x506c8
+
 #define MSR_PLATFORM_INFO	0xce
 
 #define BASE_CLOCK_MHZ		100

@@ -24,6 +24,7 @@ romstage-y += tsc_freq.c
 romstage-y += uart_early.c
 
 ramstage-y += chip.c
+ramstage-y += cpu.c
 ramstage-y += gpio.c
 ramstage-y += memmap.c
 ramstage-y += mmap_boot.c
