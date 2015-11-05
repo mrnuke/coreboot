@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2015 Intel Corp.
  * (Written by Alexandru Gagniuc <alexandrux.gagniuc@intel.com> for Intel Corp.)
+ * (Written by Andrey Petrov <andrey.petrov@intel.com> for Intel Corp.)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,6 +14,7 @@
 #include <cpu/cpu.h>
 #include <device/device.h>
 #include <device/pci.h>
+#include <fsp/api.h>
 
 static struct device_operations pci_domain_ops = {
 	.read_resources = pci_domain_read_resources,
@@ -46,7 +48,13 @@ static void enable_dev(device_t dev)
 	}
 }
 
+static void soc_init(void *data)
+{
+	fsp_silicon_init();
+}
+
 struct chip_operations soc_intel_apollolake_ops = {
 	CHIP_NAME("Intel Apollolake SOC")
 	.enable_dev = &enable_dev,
+	.init = &soc_init
 };
