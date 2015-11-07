@@ -32,10 +32,16 @@ enum fsp_status {
 	FSP_CRC_ERROR = 0x8000001b,
 };
 
+enum fsp_notify_phase {
+	AFTER_PCI_ENUM = 0x20,
+	READY_TO_BOOT = 0x40
+};
+
+
 /* Main FSP stages */
 enum fsp_status fsp_memory_init(void **hob_list);
 enum fsp_status fsp_silicon_init(void);
-enum fsp_status fsp_notify(void);
+enum fsp_status fsp_notify(enum fsp_notify_phase phase);
 
 /* Callbacks for updating stage-specific parameters */
 void platform_fsp_memory_init_params_cb(struct MEMORY_INIT_UPD *memupd);

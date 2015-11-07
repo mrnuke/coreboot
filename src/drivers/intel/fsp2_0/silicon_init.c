@@ -19,6 +19,7 @@
 typedef asmlinkage enum fsp_status (*fsp_silicon_init_fn)
 				   (struct SILICON_INIT_UPD *upd);
 
+extern struct fsp_header *fsps_hdr;
 
 static enum fsp_status do_silicon_init(struct fsp_header *hdr)
 {
@@ -43,10 +44,13 @@ static enum fsp_status do_silicon_init(struct fsp_header *hdr)
 
 enum fsp_status fsp_silicon_init(void)
 {
-	struct fsp_header hdr;
+	static struct fsp_header hdr;
 
 	if (fsp_load_binary(&hdr, "blobs/fsp-s.bin") != CB_SUCCESS)
 		return FSP_NOT_FOUND;
+
+	/* save the FSPS header, it will come in handy during notify */
+	fsps_hdr = &hdr;
 
 	return do_silicon_init(&hdr);
 }
