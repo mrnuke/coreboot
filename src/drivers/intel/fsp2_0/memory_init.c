@@ -58,13 +58,13 @@ void platform_fsp_memory_init_params_cb(struct MEMORY_INIT_UPD *memupd)
 	printk(BIOS_DEBUG, "WEAK: %s called\n", __func__);
 }
 
-static enum fsp_status do_fsp_memory_init(struct fsp_header *hdr)
+static enum fsp_status do_fsp_memory_init(void **hob_list_ptr,
+					  struct fsp_header *hdr)
 {
 	enum fsp_status status;
 	fsp_memory_init_fn fsp_raminit;
 	struct fsp_memory_init_params raminit_params;
 	struct fsp_init_rt_common_buffer rt_buffer;
-	void *hob_list_ptr;
 	struct MEMORY_INIT_UPD raminit_upd;
 	struct UPD_DATA_REGION *upd_region;
 
@@ -81,7 +81,7 @@ static enum fsp_status do_fsp_memory_init(struct fsp_header *hdr)
 	/* Get any board specific changes */
 	raminit_params.nvs_buffer = NULL;
 	raminit_params.rt_buffer = &rt_buffer;
-	raminit_params.hob_list = &hob_list_ptr;
+	raminit_params.hob_list = hob_list_ptr;
 
 	/* Update the UPD data */
 	raminit_upd.GpioPadInitTablePtr = NULL;
@@ -116,12 +116,12 @@ static void relocate_fit(void)
 	memcpy((void*)CONFIG_FIT_CAR_ADDR, (void*)fit_loc, FIT_SIZE);
 }
 
-enum fsp_status fsp_memory_init(void)
+enum fsp_status fsp_memory_init(void **hob_list)
 {
 	struct fsp_header hdr;
 
 	if (fsp_load_binary(&hdr, "blobs/fsp-m.bin") != CB_SUCCESS)
 		return FSP_NOT_FOUND;
 	relocate_fit();
-	return do_fsp_memory_init(&hdr);
+	return do_fsp_memory_init(hob_list, &hdr);
 }

@@ -74,6 +74,7 @@ static void *alloc_stack_in_ram(void)
 
 asmlinkage void* romstage_entry(void)
 {
+	void *hob_list_ptr;
 	/* Be careful. Bootblock might already have initialized the console */
 	if (!IS_ENABLED(CONFIG_BOOTBLOCK_CONSOLE)) {
 		lpss_console_uart_init();
@@ -84,7 +85,7 @@ asmlinkage void* romstage_entry(void)
 
 	soc_early_romstage_init();
 
-	fsp_memory_init();
+	fsp_memory_init(&hob_list_ptr);
 
 	cbmem_initialize_empty();
 	return alloc_stack_in_ram();
