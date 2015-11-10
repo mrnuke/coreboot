@@ -15,6 +15,7 @@
 
 #define P2SB_BAR			0xd0000000
 #define MCH_BASE_ADDR			0xfed10000
+#define MCH_BASE_SIZE			(32 * KiB)
 
 #define ACPI_PMIO_BASE			0x400
 #define  R_ACPI_PM1_TMR			0x8

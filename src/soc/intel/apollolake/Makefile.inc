@@ -30,6 +30,7 @@ ramstage-y += gpio.c
 ramstage-y += lpc.c
 ramstage-y += memmap.c
 ramstage-y += mmap_boot.c
+ramstage-y += northbridge.c
 ramstage-y += tsc_freq.c
 ramstage-y += uart.c
 
