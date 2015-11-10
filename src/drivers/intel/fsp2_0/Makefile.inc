@@ -1,3 +1,5 @@
+
+romstage-y += hand_off_block.c
 romstage-y += util.c
 romstage-y += memory_init.c
 
