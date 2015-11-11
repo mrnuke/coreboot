@@ -41,7 +41,6 @@ typedef asmlinkage enum fsp_status (*fsp_memory_init_fn)
 
 static void fill_console_params(struct MEMORY_INIT_UPD *memupd)
 {
-	/* TODO: Check that FSP actually respects these flags */
 	if (IS_ENABLED(CONFIG_CONSOLE_SERIAL)) {
 		memupd->SerialDebugPortDevice = CONFIG_UART_FOR_CONSOLE;
 		memupd->SerialDebugPortType = 2;
@@ -65,12 +64,11 @@ static enum fsp_status do_fsp_memory_init(void **hob_list_ptr,
 	fsp_memory_init_fn fsp_raminit;
 	struct fsp_memory_init_params raminit_params;
 	struct fsp_init_rt_common_buffer rt_buffer;
-	struct MEMORY_INIT_UPD raminit_upd;
-	struct UPD_DATA_REGION *upd_region;
+	struct MEMORY_INIT_UPD raminit_upd, *upd_region;
 
 	post_code(0x34);
 	upd_region = (void*)(hdr->cfg_region_offset + hdr->image_base);
-	memcpy(&raminit_upd, upd_region, sizeof(raminit_upd));
+	raminit_upd = *upd_region;
 
 	/* Zero fill RT Buffer data and start populating fields. */
 	memset(&rt_buffer, 0, sizeof(rt_buffer));

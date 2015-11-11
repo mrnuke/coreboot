@@ -22,15 +22,14 @@ typedef asmlinkage enum fsp_status (*fsp_silicon_init_fn)
 
 static enum fsp_status do_silicon_init(struct fsp_header *hdr)
 {
-	struct SILICON_INIT_UPD silicon_upd;
+	struct SILICON_INIT_UPD silicon_upd, *upd_region;
 	fsp_silicon_init_fn silicon_init;
-	void *upd_region;
 	enum fsp_status status;
 
 	upd_region = (void*)(hdr->cfg_region_offset + hdr->image_base);
 
 	/* populate upd with defaults */
-	memcpy(&silicon_upd, upd_region, sizeof(silicon_upd));
+	silicon_upd = *upd_region;
 
 	silicon_init = (void *)(hdr->image_base + hdr->silicon_init_entry_offset);
 

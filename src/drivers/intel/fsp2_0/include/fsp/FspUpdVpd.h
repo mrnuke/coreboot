@@ -110,277 +110,11 @@ struct BL_GPIO_PAD_INIT {
 
 
 
+#define FSP_TEMP_RAM_INIT_UPD_SIGNATURE  0x4450555F54505346        /* 'FSPT_UPD' */
+#define FSP_MEMORY_INIT_UPD_SIGNATURE    0x4450555F4D505346        /* 'FSPM_UPD' */
+#define FSP_SILICON_INIT_UPD_SIGNATURE   0x4450555F53505346        /* 'FSPS_UPD' */
+
 struct TEMP_RAM_INIT_UPD {
-/** Offset 0x0020
-**/
-  uint64_t                      Signature;
-/** Offset 0x0028
-**/
-  uint8_t                       Revision;
-/** Offset 0x0029
-**/
-  uint8_t                       UnusedUpdSpace0[83];
-/** Offset 0x007C
-**/
-  uint32_t                      ReservedTempRamInitUpd;
-} __attribute__((packed));
-
-struct MEMORY_INIT_UPD {
-/** Offset 0x0080
-**/
-  uint64_t                      Signature;
-/** Offset 0x0088
-**/
-  uint8_t                       Revision;
-/** Offset 0x0089
-**/
-  uint8_t                       UnusedUpdSpace1[7];
-/** Offset 0x0090
-    Debug Serial Port Base
-    Debug serial port resource base address, either I/O or MMIO base.
-**/
-  uint32_t                      SerialDebugPortAddress;
-/** Offset 0x0094
-    Debug Serial Port Type
-    Debug serial port resource type. NONE means no serial port support.
-**/
-  uint8_t                       SerialDebugPortType;
-/** Offset 0x0095
-    Serial Port Debug Device
-    Select active serial port device. For SOC UART devices,'Debug Serial Port Base' options will be ignored.
-**/
-  uint8_t                       SerialDebugPortDevice;
-/** Offset 0x0096
-    Debug Serial Port Stride Size
-    Debug serial port register map stride size.
-**/
-  uint8_t                       SerialDebugPortStrideSize;
-/** Offset 0x0097
-**/
-  uint8_t                       ReservedUpd1;
-/** Offset 0x0098
-    Memory FastBootSupport
-    MRC Fast Boot Support
-**/
-  uint8_t                       MrcFastBoot;
-/** Offset 0x0099
-**/
-  uint8_t                       UnusedUpdSpace2[7];
-/** Offset 0x00A0
-    Memory EccSupport
-    ECC Support
-**/
-  uint8_t                       EccSupport;
-/** Offset 0x00A1
-    Memory DdrFreqLimit
-    DDR Freq Limit
-**/
-  uint8_t                       DdrFreqLimit;
-/** Offset 0x00A2
-    Memory MaxTolud
-    MaxTolud
-**/
-  uint32_t                      MaxTolud;
-/** Offset 0x00A6
-    MrcDebugMsgLevel
-    Set MRC DebugMsg Level
-**/
-  uint8_t                       MrcDebugMsgLevel;
-/** Offset 0x00A7
-    Integrated Graphics Device
-    Enable : Enable Integrated Graphics Device (IGD) when selected as the Primary Video Adaptor. Disable: Alwarys disable IGD
-**/
-  uint8_t                       Igd;
-/** Offset 0x00A8
-    DVMT Pre-Allocated
-    Select DVMT 5.0 Pre-Allocated (Fixed) Graphics Memory size used by the Internal Graphics Device
-**/
-  uint8_t                       IgdDvmt50PreAlloc;
-/** Offset 0x00A9
-    Aperture Size
-    Select the Aperture Size.
-**/
-  uint8_t                       IgdApertureSize;
-/** Offset 0x00AA
-    GTT Size
-    Select the GTT Size.
-**/
-  uint8_t                       GTTSize;
-/** Offset 0x00AB
-    Primary Display
-    Select which of IGD/PCI Graphics device should be Primary Display.
-**/
-  uint8_t                       PrimaryVideoAdaptor;
-/** Offset 0x00AC
-**/
-  uint8_t                       PmSupport;
-/** Offset 0x00AD
-**/
-  uint8_t                       EnableRenderStandby;
-/** Offset 0x00AE
-**/
-  uint8_t                       PavpEnable;
-/** Offset 0x00AF
-**/
-  uint8_t                       SataEnable;
-/** Offset 0x00B0
-    Enable SATA
-    Enable/disable SATA controller.
-**/
-  uint8_t                       EnableSata;
-/** Offset 0x00B1
-    SATA Mode
-    Select SATA controller working mode.
-**/
-  uint8_t                       SataMode;
-/** Offset 0x00B2
-    Enable SATA
-    Enable/disable SATA controller.
-**/
-  uint8_t                       SataSalpSupport;
-/** Offset 0x00B3
-    Enable SATA ports
-    Enable/disable SATA ports. One byte for each port, byte0 for port0, byte1 for port1, and so on.
-**/
-  uint8_t                       SataPortsEnable[2];
-/** Offset 0x00B5
-    Enable SATA DEVSLP Feature
-    Enable/disable SATA DEVSLP per port. 0 is disable, 1 is enable. One byte for each port, byte0 for port0, byte1 for port1, and so on.
-**/
-  uint8_t                       SataPortsDevSlp[2];
-/** Offset 0x00B7
-    Enable PCIE RP
-    Enable/disable PCIE Root Ports. 0: disable, 1: enable. One byte for each port, byte0 for port1, byte1 for port2, and so on.
-**/
-  uint8_t                       PcieRpEnable[6];
-/** Offset 0x00BD
-    Configure CLKREQ Number
-    Configure Root Port CLKREQ Number if CLKREQ is supported. Each value in arrary can be between 0-6. One byte for each port, byte0 for port1, byte1 for port2, and so on.
-**/
-  uint8_t                       PcieRpClkReqNumber[6];
-/** Offset 0x00C3
-    Enable USB2 ports
-    Enable/disable per USB2 ports. One byte for each port, byte0 for port0, byte1 for port1, and so on.
-**/
-  uint8_t                       PortUsb20Enable[8];
-/** Offset 0x00CB
-    Enable USB3 ports
-    Enable/disable per USB3 ports. One byte for each port, byte0 for port0, byte1 for port1, and so on.
-**/
-  uint8_t                       PortUsb30Enable[6];
-/** Offset 0x00D1
-    Enable XHCI SSIC Eanble
-    Enable/disable XHCI SSIC port.
-**/
-  uint8_t                       SsicPortEnable;
-/** Offset 0x00D2
-    Enable SMBus
-    Enable/disable SMBus controller.
-**/
-  uint8_t                       SmbusEnable;
-/** Offset 0x00D3
-**/
-  uint8_t                       UnusedUpdSpace3[13];
-/** Offset 0x00E0
-**/
-  uint8_t                       IspEn;
-/** Offset 0x00E1
-**/
-  uint8_t                       IspAcpiMode;
-/** Offset 0x00E2
-**/
-  uint32_t                      AdditionalFvBase;
-/** Offset 0x00E6
-**/
-  uint8_t                       UnusedUpdSpace4[122];
-/** Offset 0x0160
-**/
-  uint32_t                      ObbLoadingBase;
-/** Offset 0x0164
-**/
-  uint32_t                      ObbFlashBase;
-/** Offset 0x0168
-**/
-  uint32_t                      ObbFlashSize;
-/** Offset 0x016C
-**/
-  uint8_t                       UnusedUpdSpace5[20];
-/** Offset 0x0180
-**/
-  uint8_t                       ObbFileName[16];
-/** Offset 0x0190
-**/
-  uint8_t                       UnusedUpdSpace6[48];
-/** Offset 0x01C0
-**/
-  struct BL_GPIO_PAD_INIT*           GpioPadInitTablePtr;
-/** Offset 0x01C4
-**/
-  uint8_t                       UnusedUpdSpace7[56];
-/** Offset 0x01FC
-**/
-  uint32_t                      ReservedMemoryInitUpd;
-} __attribute__((packed));
-
-struct SILICON_INIT_UPD {
-/** Offset 0x0200
-**/
-  uint64_t                      Signature;
-/** Offset 0x0208
-**/
-  uint8_t                       Revision;
-/** Offset 0x0209
-**/
-  uint8_t                       UnusedUpdSpace8[7];
-/** Offset 0x0210
-    Logo Pointer
-    Points to PEI Display Logo Image
-**/
-  uint32_t                      LogoPtr;
-/** Offset 0x0214
-    Logo Size
-    Size of PEI Display Logo Image
-**/
-  uint32_t                      LogoSize;
-/** Offset 0x0218
-    Graphics Configuration Ptr
-    Points to VBT
-**/
-  uint32_t                      GraphicsConfigPtr;
-/** Offset 0x021C
-    Enable HD Audio DSP
-    Enable/disable HD Audio DSP feature.
-**/
-  uint8_t                       DspEnable;
-/** Offset 0x021D
-    Select HDAudio IoBuffer Ownership
-    Select HDAudio IoBuffer Ownership.
-**/
-  uint8_t                       IoBufferOwnership;
-/** Offset 0x021E
-    BXT PlatformType
-    BXT PlatformType.
-**/
-  uint8_t                       PlatformType;
-/** Offset 0x021F
-    DynSR
-    Enable/disable DynSR feature.
-**/
-  uint8_t                       DynSR;
-/** Offset 0x0220
-**/
-  uint8_t                       UnusedUpdSpace9[20];
-/** Offset 0x0234
-**/
-  uint8_t                       ReservedSiliconInitUpd[292];
-} __attribute__((packed));
-
-#define FSP_UPD_SIGNATURE                0x2444505554584224        /* '$BXTUPD$' */
-#define FSP_TEMP_RAM_INIT_UPD_SIGNATURE  0x24445055504D5424        /* '$TMPUPD$' */
-#define FSP_MEMORY_INIT_UPD_SIGNATURE    0x244450554D454D24        /* '$MEMUPD$' */
-#define FSP_SILICON_INIT_UPD_SIGNATURE   0x244450555F495324        /* '$SI_UPD$' */
-
-struct UPD_DATA_REGION {
 /** Offset 0x0000
 **/
   uint64_t                      Signature;
@@ -389,59 +123,240 @@ struct UPD_DATA_REGION {
   uint8_t                       Revision;
 /** Offset 0x0009
 **/
-  uint8_t                       ReservedUpd0[7];
-/** Offset 0x0010
+  uint8_t                       UnusedUpdSpace0[67];
+/** Offset 0x004C
 **/
-  uint32_t                      TempRamInitUpdOffset;
-/** Offset 0x0014
+  uint32_t                      ReservedTempRamInitUpd;
+} __attribute__((packed));
+
+struct MEMORY_INIT_UPD {
+/** Offset 0x0000
 **/
-  uint32_t                      MemoryInitUpdOffset;
-/** Offset 0x0018
+  uint64_t                      Signature;
+/** Offset 0x0008
 **/
-  uint32_t                      SiliconInitUpdOffset;
-/** Offset 0x001C
+  uint8_t                       Revision;
+/** Offset 0x0009
 **/
-  uint32_t                      ReservedUpd1;
+  uint8_t                       UnusedUpdSpace0[23];
 /** Offset 0x0020
+    Debug Serial Port Base
+    Debug serial port base address. This option will be used only when the 'Serial Port Debug Device' option is set to 'External Device'.
 **/
-  struct TEMP_RAM_INIT_UPD           TempRamInitUpd;
+  uint32_t                      SerialDebugPortAddress;
+/** Offset 0x0024
+    Debug Serial Port Type
+    16550 compatible debug serial port resource type. NONE means no serial port support.
+**/
+  uint8_t                       SerialDebugPortType;
+/** Offset 0x0025
+    Serial Port Debug Device
+    Select active serial port device for debug. For SOC UART devices,'Debug Serial Port Base' options will be ignored.
+**/
+  uint8_t                       SerialDebugPortDevice;
+/** Offset 0x0026
+    Debug Serial Port Stride Size
+    Debug serial port register map stride size in bytes.
+**/
+  uint8_t                       SerialDebugPortStrideSize;
+/** Offset 0x0027
+**/
+  uint8_t                       UnusedUpdSpace1;
+/** Offset 0x0028
+    Memory Fast Boot
+    Enable/Disable MRC fast boot support.
+**/
+  uint8_t                       MrcFastBoot;
+/** Offset 0x0029
+**/
+  uint8_t                       UnusedUpdSpace2[103];
+/** Offset 0x0090
+    Integrated Graphics Device
+    Enable : Enable Integrated Graphics Device (IGD) when selected as the Primary Video Adaptor. Disable: Always disable IGD.
+**/
+  uint8_t                       Igd;
+/** Offset 0x0091
+    DVMT Pre-Allocated
+    Select DVMT 5.0 Pre-Allocated (Fixed) Graphics Memory size used by the Internal Graphics Device.
+**/
+  uint8_t                       IgdDvmt50PreAlloc;
+/** Offset 0x0092
+    Aperture Size
+    Select the Aperture Size used by the Internal Graphics Device.
+**/
+  uint8_t                       IgdApertureSize;
+/** Offset 0x0093
+    GTT Size
+    Select the GTT Size used by the Internal Graphics Device.
+**/
+  uint8_t                       GTTSize;
+/** Offset 0x0094
+    Primary Display
+    Select which of IGD/PCI Graphics device should be Primary Display.
+**/
+  uint8_t                       PrimaryVideoAdaptor;
+/** Offset 0x0095
+    GT PM Support
+    Enable/Disable GT power management support.
+**/
+  uint8_t                       PmSupport;
+/** Offset 0x0096
+    RC6(Render Standby)
+    Enable/Disable render standby support.
+**/
+  uint8_t                       EnableRenderStandby;
+/** Offset 0x0097
+    PAVP Enable
+    Enable/Disable Protected Audio Visual Path (PAVP).
+**/
+  uint8_t                       PavpEnable;
+/** Offset 0x0098
+**/
+  uint8_t                       UnusedUpdSpace3[116];
+/** Offset 0x010C
+    OEM File Loading Address
+    Determine the memory base address to load a specified file from CSE file system after memory is available.
+**/
+  uint32_t                      ObbLoadingBase;
+/** Offset 0x0110
+    OEM file name to load
+    Specify a file name to load from CSE file system after memory is available. Empty indicates no file needs to be loaded.
+**/
+  uint8_t                       ObbFileName[16];
+/** Offset 0x0120
+**/
+  uint8_t                       UnusedUpdSpace4[48];
+/** Offset 0x0150
+    GPIO Table Pointer
+    GPIO table pointer to a BL_GPIO_PAD_INIT structure.
+**/
+  struct BL_GPIO_PAD_INIT*           GpioPadInitTablePtr;
+/** Offset 0x0154
+**/
+  uint8_t                       UnusedUpdSpace5[56];
+/** Offset 0x018C
+**/
+  uint32_t                      ReservedMemoryInitUpd;
+} __attribute__((packed));
+
+struct SILICON_INIT_UPD {
+/** Offset 0x0000
+**/
+  uint64_t                      Signature;
+/** Offset 0x0008
+**/
+  uint8_t                       Revision;
+/** Offset 0x0009
+**/
+  uint8_t                       UnusedUpdSpace0[23];
+/** Offset 0x0020
+    Enable SD controller
+    Enable/disable SD Card controller.
+**/
+  uint8_t                       SdcardEnabled;
+/** Offset 0x0021
+    Enable SDIO controller
+    Enable/disable SDIO controller.
+**/
+  uint8_t                       SdioEnabled;
+/** Offset 0x0022
+    Enable eMMC controller
+    Enable/disable eMMC controller.
+**/
+  uint8_t                       eMMCEnabled;
+/** Offset 0x0023
+**/
+  uint8_t                       UnusedUpdSpace1[93];
 /** Offset 0x0080
+    Enable SATA
+    Enable/disable SATA controller.
 **/
-  struct MEMORY_INIT_UPD             MemoryInitUpd;
-/** Offset 0x0200
+  uint8_t                       EnableSata;
+/** Offset 0x0081
+    SATA Mode
+    Select SATA controller working mode.
 **/
-  struct SILICON_INIT_UPD            SiliconInitUpd;
-/** Offset 0x0358
+  uint8_t                       SataMode;
+/** Offset 0x0082
+    Aggressive SATA LPM Support
+    Enable SOC to aggressively enter link power state for SATA.
 **/
-  uint8_t                       UnusedUpdSpace10[166];
-/** Offset 0x03FE
+  uint8_t                       SataSalpSupport;
+/** Offset 0x0083
+    Enable SATA ports
+    Enable/disable SATA ports. One byte for each port, byte0 for port0, byte1 for port1, and so on.
 **/
-  uint16_t                      RegionTerminator;
+  uint8_t                       SataPortsEnable[2];
+/** Offset 0x0085
+    Enable SATA DEVSLP Feature
+    Enable/disable SATA DEVSLP per port. 0 is disable, 1 is enable. One byte for each port, byte0 for port0, byte1 for port1, and so on.
+**/
+  uint8_t                       SataPortsDevSlp[2];
+/** Offset 0x0087
+    Enable PCIE RP
+    Enable/disable PCIE Root Ports. 0: disable, 1: enable. One byte for each port, byte0 for port1, byte1 for port2, and so on.
+**/
+  uint8_t                       PcieRpEnable[6];
+/** Offset 0x008D
+    Configure CLKREQ Number
+    Configure Root Port CLKREQ Number if CLKREQ is supported. Each value in array can be between 0-6. One byte for each port, byte0 for port1, byte1 for port2, and so on.
+**/
+  uint8_t                       PcieRpClkReqNumber[6];
+/** Offset 0x0093
+    Enable USB2 ports
+    Enable/disable per USB2 ports. One byte for each port, byte0 for port0, byte1 for port1, and so on.
+**/
+  uint8_t                       PortUsb20Enable[8];
+/** Offset 0x009B
+    Enable USB3 ports
+    Enable/disable per USB3 ports. One byte for each port, byte0 for port0, byte1 for port1, and so on.
+**/
+  uint8_t                       PortUsb30Enable[6];
+/** Offset 0x00A1
+    Enable XHCI SSIC Eanble
+    Enable/disable XHCI SSIC port.
+**/
+  uint8_t                       SsicPortEnable;
+/** Offset 0x00A2
+    Enable SMBus
+    Enable/disable SMBus controller.
+**/
+  uint8_t                       SmbusEnable;
+/** Offset 0x00A3
+**/
+  uint8_t                       UnusedUpdSpace2[13];
+/** Offset 0x00B0
+    ISP Enable/Disable
+    Enable/Disable ISP Device.
+**/
+  uint8_t                       IspEn;
+/** Offset 0x00B1
+**/
+  uint8_t                       UnusedUpdSpace3[303];
+/** Offset 0x01E0
+    BMP Logo Data Size
+    BMP logo data buffer size.
+**/
+  uint32_t                      LogoSize;
+/** Offset 0x01E4
+    BMP Logo Data Pointer
+    BMP logo data pointer to a BMP format buffer.
+**/
+  uint32_t                      LogoPtr;
+/** Offset 0x01E8
+    Graphics Configuration Data Pointer
+    Graphics configuration data used for initialization.
+**/
+  uint32_t                      GraphicsConfigPtr;
+/** Offset 0x01EC
+**/
+  uint8_t                       UnusedUpdSpace4[12];
+/** Offset 0x01F8
+**/
+  uint32_t                      ReservedSiliconInitUpd;
 } __attribute__((packed));
 
 #define FSP_IMAGE_ID    0x2450534654584224        /* '$BXTFSP$' */
-#define FSP_IMAGE_REV   0x01010000 
-
-struct VPD_DATA_REGION {
-/** Offset 0x0000
-**/
-  uint64_t                      PcdVpdRegionSign;
-/** Offset 0x0008
-    PcdImageRevision
-**/
-  uint32_t                      PcdImageRevision;
-/** Offset 0x000C
-**/
-  uint32_t                      PcdUpdRegionOffset;
-/** Offset 0x0010
-**/
-  uint32_t                      PcdUpdRegionSize;
-/** Offset 0x0014
-**/
-  uint64_t                      UnusedVpdSpace0;
-/** Offset 0x001C
-**/
-  uint32_t                      PcdVpdReserved;
-} __attribute__((packed));
+#define FSP_IMAGE_REV   0x00060000
 
 #endif
