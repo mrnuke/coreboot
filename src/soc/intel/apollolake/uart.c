@@ -11,14 +11,20 @@
  */
 
 #include <console/uart.h>
+#include <device/device.h>
+#include <device/pci.h>
+#include <device/pci_ids.h>
 
 /*
- * TODO: We need a mechanism to return the new BAR once the resource allocator
- * gives us a new location.
+ * Shadow BAR for console UART:
+ * This allows us to keep track of the actual MMIO region without needing to
+ * pci_dev_locate()/pci_read_config32() on every uart_platform_base() call.
  */
+static uintptr_t uart_bar = CONFIG_CONSOLE_UART_BASE_ADDRESS;
+
 uintptr_t uart_platform_base(int idx)
 {
-	return (CONFIG_CONSOLE_UART_BASE_ADDRESS);
+	return uart_bar;
 }
 
 unsigned int uart_platform_refclk(void)
@@ -26,3 +32,35 @@ unsigned int uart_platform_refclk(void)
 	/* That's within 0.5% of the actual value we've set earlier */
 	return 115200 * 16;
 }
+
+static void update_uart_bar(struct device *dev)
+{
+	uart_bar = find_resource(dev, PCI_BASE_ADDRESS_0)->base;
+}
+
+static void uart_set_resources(struct device *dev)
+{
+	if (dev->path.pci.devfn == PCI_DEVFN(0x18, CONFIG_UART_FOR_CONSOLE))
+		update_uart_bar(dev);
+
+	pci_dev_set_resources(dev);
+}
+
+static struct device_operations uart_ops = {
+	.read_resources   = pci_dev_read_resources,
+	.set_resources    = uart_set_resources,
+	.enable_resources = pci_dev_enable_resources,
+	.init             = pci_dev_init,
+	.enable           = DEVICE_NOOP
+};
+
+static const unsigned short uart_ids[] = {
+	0x5abc, 0x5abe, 0x5ac0, 0x5aee,
+	0
+};
+
+static const struct pci_driver uart_driver __pci_driver = {
+	.ops     = &uart_ops,
+	.vendor  = PCI_VENDOR_ID_INTEL,
+	.devices = uart_ids
+};
