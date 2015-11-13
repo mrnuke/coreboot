@@ -27,6 +27,7 @@ ramstage-$(CONFIG_HAVE_ACPI_TABLES) += acpi.c
 ramstage-y += chip.c
 ramstage-y += cpu.c
 ramstage-y += gpio.c
+ramstage-y += lpc.c
 ramstage-y += memmap.c
 ramstage-y += mmap_boot.c
 ramstage-y += tsc_freq.c
