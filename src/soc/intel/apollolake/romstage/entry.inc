@@ -21,9 +21,9 @@ apollolake_entry:
 	call	romstage_entry
 
 	/*
-	 * eax contains pointer to a region in RAM that we've been given the go
-	 * ahead to use as stack. The old stack is empty at this point, so we
-	 * don't have to relocate anything.
+	 * eax contains pointer to a region that we've been given the go ahead
+	 * to use as stack. The old stack is empty at this point, so we don't
+	 * have to relocate anything.
 	 */
 	mov	esp, eax
 

@@ -12,7 +12,6 @@ config CPU_SPECIFIC_OPTIONS
 	select ARCH_ROMSTAGE_X86_32
 	select ARCH_VERSTAGE_X86_32
 	# CPU specific options
-	select CPU_INTEL_FIRMWARE_INTERFACE_TABLE
 	select IOAPIC
 	select SMP
 	select SSE2
@@ -67,17 +66,7 @@ config DCACHE_RAM_BOOTBLOCK_STACK_SIZE
 	default 0x800
 	help
 	  The amount of anticipated stack usage from the bootblock during
-	  pre-romstage initialization.
-
-config ROMSTAGE_RAM_STACK_SIZE
-	hex
-	default 0x5000
-	help
-	   The size of the romstage stack after memory is available. Because CAR
-	   space is very crowded, only a very limited part of CAR is available
-	   for stack. More than that is needed to decompress ramstage. This
-	   variable indicates how much RAM to reserve for the stack after
-	   raminit. The stack is automatically switched after romstage_main().
+	  pre-romstage initialization..
 
 config IFD_BIOS_START
 	hex

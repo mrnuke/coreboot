@@ -55,23 +55,18 @@ static void soc_early_romstage_init(void)
 	pci_write_config32(PCI_DEV(0, 13, 0), 0x60, 1<<7);
 }
 
-static void *alloc_stack_in_ram(void)
+/*
+ * Now that FSP is done consuming large amounts of CAR, we can use a much
+ * larger portion of CAR for the stack. The larger stack is needed for
+ * decompressing ramstage. It turns out that setting the stack pointer to top
+ * of CAR gives us the largest uninterrupted stack.
+ */
+static void *realloc_stack(void)
 {
-	uint8_t *ram_stack = cbmem_add(CBMEM_ID_ROMSTAGE_RAM_STACK,
-				    CONFIG_ROMSTAGE_RAM_STACK_SIZE);
-
-	/*
-	 * If cbmem fails to give us a memory window, try to get a stack at
-	 * 2 MiB, and hope we can go forward. The 2 MiB address is arbitrary.
-	 */
-	if (ram_stack == NULL) {
-		printk(BIOS_ALERT, "Could not find place for stack\n");
-		return (void *)(2 * MiB);
-	}
-
-	/* The initial stack pointer should point at the top of the region */
-	ram_stack += CONFIG_ROMSTAGE_RAM_STACK_SIZE - sizeof(size_t);
-	return ram_stack;
+	uintptr_t new_stack = CONFIG_DCACHE_RAM_BASE + CONFIG_DCACHE_RAM_SIZE;
+	new_stack -= sizeof(size_t);
+	printk(BIOS_DEBUG, "Placing new stack at 0x%lx\n", new_stack);
+	return (void *)new_stack;
 }
 
 asmlinkage void* romstage_entry(void)
@@ -101,7 +96,7 @@ asmlinkage void* romstage_entry(void)
 	if (fsp_mem.base != (uintptr_t)cbmem_find(CBMEM_ID_FSP_RESERVED_MEMORY))
 		die("Failed to accommodate FSP reserved memory request");
 
-	return alloc_stack_in_ram();
+	return realloc_stack();
 }
 
 asmlinkage void romstage_after_raminit(void)
