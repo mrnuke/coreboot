@@ -11,12 +11,19 @@
  */
 
 #include <cpu/cpu.h>
+#include <cpu/x86/cache.h>
+#include <cpu/x86/mtrr.h>
 #include <device/device.h>
 #include <device/pci.h>
 #include <soc/cpu.h>
 
 static void cpu_core_init(device_t cpu)
 {
+	/* Turn on cache */
+	x86_enable_cache();
+	/* Set up Memory Type Range Registers */
+	x86_setup_mtrrs();
+	x86_mtrr_check();
 }
 
 static struct device_operations cpu_dev_ops = {
