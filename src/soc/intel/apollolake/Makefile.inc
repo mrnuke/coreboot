@@ -24,6 +24,7 @@ romstage-y += tsc_freq.c
 romstage-y += uart_early.c
 
 ramstage-$(CONFIG_HAVE_ACPI_TABLES) += acpi.c
+ramstage-y += car_teardown.c
 ramstage-y += chip.c
 ramstage-y += cpu.c
 ramstage-y += gpio.c
