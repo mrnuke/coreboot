@@ -263,6 +263,13 @@ void *cbmem_entry_start(const struct cbmem_entry *entry)
 	return imd_entry_at(imd, cbmem_to_imd(entry));
 }
 
+void cbmem_region_used(uintptr_t *base, size_t *size)
+{
+	void *baseptr;
+	imd_region_used(cbmem_get_imd(), &baseptr, size);
+	*base = (uintptr_t)baseptr;
+}
+
 void cbmem_add_bootmem(void)
 {
 	void *base = NULL;
