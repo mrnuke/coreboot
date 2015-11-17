@@ -11,6 +11,8 @@
  */
 
 #include <arch/acpi.h>
+#include <arch/ioapic.h>
+#include <arch/smp/mpspec.h>
 #include <cpu/x86/smm.h>
 #include <soc/acpi.h>
 #include <soc/iomap.h>
@@ -21,9 +23,29 @@ unsigned long acpi_fill_mcfg(unsigned long current)
 	return current;
 }
 
+static unsigned long acpi_madt_irq_overrides(unsigned long current)
+{
+	uint16_t flags = MP_IRQ_TRIGGER_LEVEL | MP_IRQ_POLARITY_LOW;;
+
+	/* INT_SRC_OVR */
+	current += acpi_create_madt_irqoverride((void *)current, 0, 0, 2, 0);
+
+	/* SCI */
+	current += acpi_create_madt_irqoverride((void *)current, 0, 9, 9, flags);
+
+	return current;
+}
+
 unsigned long acpi_fill_madt(unsigned long current)
 {
-	return current;
+	/* Local APICs */
+	current = acpi_create_madt_lapics(current);
+
+	/* IOAPIC */
+	current += acpi_create_madt_ioapic((void *) current,
+					     2, IO_APIC_ADDR, 0);
+
+	return acpi_madt_irq_overrides(current);
 }
 
 static int acpi_sci_irq(void)
