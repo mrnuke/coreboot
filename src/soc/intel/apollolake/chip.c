@@ -11,6 +11,8 @@
  * (at your option) any later version.
  */
 
+#include <bootstate.h>
+#include <console/console.h>
 #include <cpu/cpu.h>
 #include <device/device.h>
 #include <device/pci.h>
@@ -63,3 +65,19 @@ struct chip_operations soc_intel_apollolake_ops = {
 	.enable_dev = &enable_dev,
 	.init = &soc_init
 };
+
+static void fsp_notify_dummy(void *arg)
+{
+
+	enum fsp_notify_phase ph = (enum fsp_notify_phase) arg;
+
+	if (fsp_notify(ph) != FSP_SUCCESS)
+		printk(BIOS_CRIT, "FspNotify failed!\n");
+}
+
+BOOT_STATE_INIT_ENTRY(BS_DEV_RESOURCES, BS_ON_EXIT, fsp_notify_dummy,
+						(void *) AFTER_PCI_ENUM);
+BOOT_STATE_INIT_ENTRY(BS_PAYLOAD_LOAD, BS_ON_EXIT, fsp_notify_dummy,
+						(void *) READY_TO_BOOT);
+BOOT_STATE_INIT_ENTRY(BS_OS_RESUME, BS_ON_ENTRY, fsp_notify_dummy,
+						(void *) READY_TO_BOOT);
