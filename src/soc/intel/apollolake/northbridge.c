@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2015 Intel Corp.
  * (Written by Andrey Petrov <andrey.petrov@intel.com> for Intel Corp.)
+ * (Written by Alexandru Gagniuc <alexandrux.gagniuc@intel.com> for Intel Corp.)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,48 +53,42 @@ static int mc_add_fixed_mmio_resources(device_t dev, int index)
 static int mc_add_dram_resources(device_t dev, int index)
 {
 	unsigned long base_k, size_k;
+	uint32_t bgsm, bdsm, tolud, tseg;
 	struct resource *resource;
 
-	struct reserved_ram {
-		uint32_t bgsm;
-		uint32_t bdsm;
-		uint32_t tolud;
-		uint32_t tseg;
-	} aplk_reserved_ram;
-
-	aplk_reserved_ram.bgsm  = pci_read_config32(dev, BGSM);
-	aplk_reserved_ram.bdsm  = pci_read_config32(dev, BDSM);
-	aplk_reserved_ram.tolud = pci_read_config32(dev, TOLUD);
-	aplk_reserved_ram.tseg  = pci_read_config32(dev, TSEG);
+	bgsm  = pci_read_config32(dev, BGSM) & 0xfff00000;
+	bdsm  = pci_read_config32(dev, BDSM) & 0xfff00000;
+	tolud = pci_read_config32(dev, TOLUD) & 0xfff00000;
+	tseg  = pci_read_config32(dev, TSEG) & 0xfff00000;
 
 	/* 0 - > 0xa0000: 640kb of DOS memory. Not enough for anybody nowadays */
 	ram_resource(dev, index++, 0, 640);
 
 	/* 0xc0000 -> top_of_ram, skipping the legacy VGA region */
 	base_k = 768;
-	size_k = (aplk_reserved_ram.tseg >> 10) - base_k;
+	size_k = (tseg >> 10) - base_k;
 	ram_resource(dev, index++, base_k, size_k);
 
 	/* TSEG -> BGSM */
 	resource = new_resource(dev, index++);
-	resource->base = aplk_reserved_ram.tseg;
-	resource->size = aplk_reserved_ram.bgsm - resource->base;
+	resource->base = tseg;
+	resource->size = bgsm - resource->base;
 	resource->flags = IORESOURCE_MEM | IORESOURCE_FIXED |
 			  IORESOURCE_STORED | IORESOURCE_RESERVE |
 			  IORESOURCE_ASSIGNED | IORESOURCE_CACHEABLE;
 
 	/* BGSM -> BDSM */
 	resource = new_resource(dev, index++);
-	resource->base = aplk_reserved_ram.bgsm;
-	resource->size = aplk_reserved_ram.bdsm - resource->base;
+	resource->base = bgsm;
+	resource->size = bdsm - resource->base;
 	resource->flags = IORESOURCE_MEM | IORESOURCE_FIXED |
 			  IORESOURCE_STORED | IORESOURCE_RESERVE |
 			  IORESOURCE_ASSIGNED;
 
 	/* BDSM -> TOLUD */
 	resource = new_resource(dev, index++);
-	resource->base = aplk_reserved_ram.bdsm;
-	resource->size = aplk_reserved_ram.tolud - resource->base;
+	resource->base = bdsm;
+	resource->size = tolud - resource->base;
 	resource->flags = IORESOURCE_MEM | IORESOURCE_FIXED |
 			  IORESOURCE_STORED | IORESOURCE_RESERVE |
 			  IORESOURCE_ASSIGNED;

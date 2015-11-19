@@ -18,7 +18,7 @@
 
 static uintptr_t smm_region_start(void)
 {
-	return pci_read_config32(PCI_DEV(0, 0, 0), TSEG) & (~1);
+	return pci_read_config32(PCI_DEV(0, 0, 0), TSEG) & 0xfff00000;
 }
 
 void *cbmem_top(void)
