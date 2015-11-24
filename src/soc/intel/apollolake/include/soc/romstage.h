@@ -14,8 +14,11 @@
 #define _SOC_APOLLOLAKE_ROMSTAGE_H_
 
 #include <arch/cpu.h>
+#include <fsp/api.h>
 
 asmlinkage void *romstage_entry(void);
 asmlinkage void romstage_after_raminit(void);
+
+void mainboard_memory_init_params(struct MEMORY_INIT_UPD *memupd);
 
 #endif /* _SOC_APOLLOLAKE_ROMSTAGE_H_ */

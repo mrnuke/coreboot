@@ -103,3 +103,14 @@ asmlinkage void romstage_after_raminit(void)
 {
 	run_ramstage();
 }
+
+void platform_fsp_memory_init_params_cb(struct MEMORY_INIT_UPD *memupd)
+{
+        mainboard_memory_init_params(memupd);
+}
+
+__attribute__ ((weak))
+void mainboard_memory_init_params(struct MEMORY_INIT_UPD *memupd)
+{
+        printk(BIOS_DEBUG, "WEAK: %s/%s called\n", __FILE__, __func__);
+}
