@@ -33,38 +33,9 @@ are permitted provided that the following conditions are met:
 #ifndef __FSPUPDVPD_H__
 #define __FSPUPDVPD_H__
 
-#define MAX_CHANNELS_NUM       2
-#define MAX_DIMMS_NUM          2
 
-struct DIMM_INFO {
-  uint8_t         DimmId;
-  uint32_t        SizeInMb;
-} __attribute__((packed));
-
-struct CHANNEL_INFO {
-  uint8_t         ChannelId;
-  uint8_t         DimmCount;
-  struct DIMM_INFO     DimmInfo[MAX_DIMMS_NUM];
-} __attribute__((packed));
-
-struct FSP_SMBIOS_MEMORY_INFO {
-  uint8_t         Revision;
-  uint16_t        DataWidth;
-  /** As defined in SMBIOS 3.0 spec
-    Section 7.18.2 and Table 75
-  **/
-  uint8_t         MemoryType;
-  uint16_t        MemoryFrequencyInMHz;
-  /** As defined in SMBIOS 3.0 spec
-    Section 7.17.3 and Table 72
-  **/
-  uint8_t         ErrorCorrectionType;
-  uint8_t         ChannelCount;
-  struct CHANNEL_INFO  ChannelInfo[MAX_CHANNELS_NUM];
-} __attribute__((packed));
-
-typedef union{
-  uint32_t padCnf0;
+typedef union {
+  uint32_t PadCnf0;
   struct {
     uint32_t GPIOTxState:1; ///< 0      GPIO TX State
     uint32_t GPIORxState:1; ///< 1      GPIO RX State, RO
@@ -84,8 +55,8 @@ typedef union{
   } r;
 } BL_CONF_PAD0;
 
-typedef union{
-  uint32_t padCnf1;
+typedef union {
+  uint32_t PadCnf1;
   struct {
     uint32_t IntSel:7;      ///< 0-6    Interrupt Select. RO
     uint32_t Reserved:1;    ///< 7      Reserved.
@@ -99,13 +70,13 @@ typedef union{
 } BL_CONF_PAD1;
 
 struct BL_GPIO_PAD_INIT {
-  BL_CONF_PAD0   padConfg0;
-  BL_CONF_PAD1   padConfg1;
+  BL_CONF_PAD0   PadConfg0;
+  BL_CONF_PAD1   PadConfg1;
   uint8_t          Community;
-  uint16_t         MMIO_ADDRESS;
+  uint16_t         MmioAddress;
   bool        HostSw;
-  bool        WakeEnabled; ///< Wake enable for direct IRQ pin
-  wchar_t         *pad_name;   ///< GPIO Pin Name for debug purpose
+  bool        WakeEnabled;
+  wchar_t         *PadName;
 } __attribute__((packed));
 
 
@@ -113,6 +84,212 @@ struct BL_GPIO_PAD_INIT {
 #define FSP_TEMP_RAM_INIT_UPD_SIGNATURE  0x4450555F54505346        /* 'FSPT_UPD' */
 #define FSP_MEMORY_INIT_UPD_SIGNATURE    0x4450555F4D505346        /* 'FSPM_UPD' */
 #define FSP_SILICON_INIT_UPD_SIGNATURE   0x4450555F53505346        /* 'FSPS_UPD' */
+
+struct DRAM_CONFIG {
+/** Offset 0x0000
+    Package
+    NOTE: First option is CoPOP if LPDDR3/LPDDR4 is being used. It is SODIMM if DDR3L is being used.
+**/
+  uint8_t                       Package;
+/** Offset 0x0001
+    Profile
+    Profile list
+**/
+  uint8_t                       Profile;
+/** Offset 0x0002
+    MemoryDown
+    Memory Down.
+**/
+  uint8_t                       MemoryDown;
+/** Offset 0x0003
+    DDR3LPageSize
+    NOTE: Only for memory down or downgrade DDR3L frequency.
+**/
+  uint8_t                       DDR3LPageSize;
+/** Offset 0x0004
+    DDR3LASR
+    NOTE: Only for memory down.
+**/
+  uint8_t                       DDR3LASR;
+/** Offset 0x0005
+    ScramblerSupport
+    Scrambler Support.
+**/
+  uint8_t                       ScramblerSupport;
+/** Offset 0x0006
+    ChannelHashMask
+    Channel Hash Mask.
+**/
+  uint16_t                      ChannelHashMask;
+/** Offset 0x0008
+    SliceHashMask
+    Slice Hash Mask.
+**/
+  uint16_t                      SliceHashMask;
+/** Offset 0x000A
+    InterleavedMode
+    Interleaved Mode.
+**/
+  uint8_t                       InterleavedMode;
+/** Offset 0x000B
+    ChannelsSlicesEnable
+    Channels Slices Enable.
+**/
+  uint8_t                       ChannelsSlicesEnable;
+/** Offset 0x000C
+    MinRefRate2xEnable
+    Provided as a means to defend against Row-Hammer attacks.
+**/
+  uint8_t                       MinRefRate2xEnable;
+/** Offset 0x000D
+    DualRankSupportEnable
+    Dual Rank Support Enable.
+**/
+  uint8_t                       DualRankSupportEnable;
+/** Offset 0x000E
+    DisableFastBoot
+    00: Disabled; Used saved training data (if valid)\n01: Enabled; Full re-train of memory.
+**/
+  uint8_t                       DisableFastBoot;
+/** Offset 0x000F
+    RmtMode
+    Rank Margin Tool Mode.
+**/
+  uint8_t                       RmtMode;
+/** Offset 0x0010
+    MemorySizeLimit
+    Memory Size Limit: This value is used to restrict the total amount of memory and the calculations based on it. Value is in MB\nExample encodings are: 0x400 = 1GB, 0x800 = 2GB, 0x1000 = 4GB, 0x2000 8GB.
+**/
+  uint16_t                      MemorySizeLimit;
+/** Offset 0x0012
+    LowMemoryMaxValue
+    Low Memory Max Value: This value is used to restrict the amount of memory below 4GB and the calculations based on it. Value is in MB\nExample encodings are: 0x400 = 1GB, 0x800 = 2GB, 0x1000 = 4GB, 0x2000 8GB.
+**/
+  uint16_t                      LowMemoryMaxValue;
+/** Offset 0x0014
+    HighMemoryMaxValue
+    High Memory Max Value: This value is used to restrict the amount of memory above 4GB and the calculations based on it. Value is in MB\nExample encodings are: 0x400 = 1GB, 0x800 = 2GB, 0x1000 = 4GB, 0x2000 8GB.
+**/
+  uint16_t                      HighMemoryMaxValue;
+/** Offset 0x0016
+    DIMM0SPDAddress
+    DIMM0 SPD Address (NOTE: Only for DDR3L only. Please put 0 for MemoryDown.
+**/
+  uint8_t                       DIMM0SPDAddress;
+/** Offset 0x0017
+    DIMM1SPDAddress
+    DIMM1 SPD Address (NOTE: Only for DDR3L only. Please put 0 for MemoryDown.
+**/
+  uint8_t                       DIMM1SPDAddress;
+/** Offset 0x0018
+    Ch0_RankEnable
+    NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
+**/
+  uint8_t                       Ch0_RankEnable;
+/** Offset 0x0019
+    Ch0_DeviceWidth
+    NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch0_DeviceWidth;
+/** Offset 0x001A
+    Ch0_DramDensity
+    NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch0_DramDensity;
+/** Offset 0x001B
+    Ch0_Option
+    [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
+**/
+  uint8_t                       Ch0_Option;
+/** Offset 0x001C
+    Ch1_RankEnable
+    NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
+**/
+  uint8_t                       Ch1_RankEnable;
+/** Offset 0x001D
+    Ch1_DeviceWidth
+    NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch1_DeviceWidth;
+/** Offset 0x001E
+    Ch1_DramDensity
+    NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch1_DramDensity;
+/** Offset 0x001F
+    Ch1_Option
+    [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
+**/
+  uint8_t                       Ch1_Option;
+/** Offset 0x0020
+    Ch2_RankEnable
+    NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
+**/
+  uint8_t                       Ch2_RankEnable;
+/** Offset 0x0021
+    Ch2_DeviceWidth
+    NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch2_DeviceWidth;
+/** Offset 0x0022
+    Ch2_DramDensity
+    NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch2_DramDensity;
+/** Offset 0x0023
+    Ch2_Option
+    [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
+**/
+  uint8_t                       Ch2_Option;
+/** Offset 0x0024
+    Ch3_RankEnable
+    NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
+**/
+  uint8_t                       Ch3_RankEnable;
+/** Offset 0x0025
+    Ch3_DeviceWidth
+    NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch3_DeviceWidth;
+/** Offset 0x0026
+    Ch3_DramDensity
+    NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
+**/
+  uint8_t                       Ch3_DramDensity;
+/** Offset 0x0027
+    Ch3_Option
+    [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
+**/
+  uint8_t                       Ch3_Option;
+/** Offset 0x0028
+    Ch0_Bit_swizzling
+    Channel 0 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
+**/
+  uint8_t                       Ch0_Bit_swizzling[32];
+/** Offset 0x0048
+    Ch1_Bit_swizzling
+    Channel 1 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
+**/
+  uint8_t                       Ch1_Bit_swizzling[32];
+/** Offset 0x0068
+    Ch2_Bit_swizzling
+    Channel 2 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
+**/
+  uint8_t                       Ch2_Bit_swizzling[32];
+/** Offset 0x0088
+    Ch3_Bit_swizzling
+    Channel 3 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
+**/
+  uint8_t                       Ch3_Bit_swizzling[32];
+/** Offset 0x00A8
+**/
+  uint8_t                       DramReserved;
+} __attribute__((packed));
+
+#define FSP_IMAGE_ID    0x245053464C504124        /* '$APLFSP$' */
+#define FSP_IMAGE_REV   0x00060000 
+
+
 
 struct TEMP_RAM_INIT_UPD {
 /** Offset 0x0000
@@ -212,29 +389,29 @@ struct MEMORY_INIT_UPD {
   uint8_t                       PavpEnable;
 /** Offset 0x0098
 **/
-  uint8_t                       UnusedUpdSpace3[116];
-/** Offset 0x010C
+  uint64_t                      UnusedUpdSpace3;
+/** Offset 0x0000
+**/
+  struct DRAM_CONFIG                 DramConfig;
+/** Offset 0x01B9
+**/
+  uint8_t                       UnusedUpdSpace6[35];
+/** Offset 0x01DC
     OEM File Loading Address
     Determine the memory base address to load a specified file from CSE file system after memory is available.
 **/
-  uint32_t                      ObbLoadingBase;
-/** Offset 0x0110
-    OEM file name to load
+  uint32_t                      OemLoadingBase;
+/** Offset 0x01E0
+    OEM File Name to Load
     Specify a file name to load from CSE file system after memory is available. Empty indicates no file needs to be loaded.
 **/
-  uint8_t                       ObbFileName[16];
-/** Offset 0x0120
-**/
-  uint8_t                       UnusedUpdSpace4[48];
-/** Offset 0x0150
+  uint8_t                       OemFileName[16];
+/** Offset 0x01F0
     GPIO Table Pointer
     GPIO table pointer to a BL_GPIO_PAD_INIT structure.
 **/
   struct BL_GPIO_PAD_INIT*           GpioPadInitTablePtr;
-/** Offset 0x0154
-**/
-  uint8_t                       UnusedUpdSpace5[56];
-/** Offset 0x018C
+/** Offset 0x01F4
 **/
   uint32_t                      ReservedMemoryInitUpd;
 } __attribute__((packed));
@@ -326,10 +503,10 @@ struct SILICON_INIT_UPD {
 **/
   uint8_t                       UnusedUpdSpace2[13];
 /** Offset 0x00B0
-    ISP Enable/Disable
-    Enable/Disable ISP Device.
+    IPU Enable/Disable
+    Enable/Disable IPU Device.
 **/
-  uint8_t                       IspEn;
+  uint8_t                       IpuEn;
 /** Offset 0x00B1
 **/
   uint8_t                       UnusedUpdSpace3[303];
@@ -355,8 +532,5 @@ struct SILICON_INIT_UPD {
 **/
   uint32_t                      ReservedSiliconInitUpd;
 } __attribute__((packed));
-
-#define FSP_IMAGE_ID    0x2450534654584224        /* '$BXTFSP$' */
-#define FSP_IMAGE_REV   0x00060000
 
 #endif
