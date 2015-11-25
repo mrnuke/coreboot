@@ -1,1 +1,1 @@
-# Nothing yet here
+ramstage-y += mainboard.c
