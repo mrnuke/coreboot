@@ -13,6 +13,7 @@
 #include <device/device.h>
 #include <device/pci.h>
 #include <device/pci_ids.h>
+#include <soc/acpi.h>
 
 static void soc_lpc_add_io_resources(device_t dev)
 {
@@ -38,6 +39,7 @@ static struct device_operations device_ops = {
 	.read_resources = &soc_lpc_read_resources,
 	.set_resources = &pci_dev_set_resources,
 	.enable_resources = &pci_dev_enable_resources,
+	.write_acpi_tables = southbridge_write_acpi_tables,
 };
 
 static const unsigned short pci_device_ids[] = {
