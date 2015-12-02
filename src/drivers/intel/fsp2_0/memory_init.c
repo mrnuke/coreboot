@@ -88,7 +88,7 @@ static enum fsp_status do_fsp_memory_init(void **hob_list_ptr,
 
 	/* Call FspMemoryInit */
 	fsp_raminit = (void *)(hdr->image_base + hdr->memory_init_entry_offset);
-	printk(BIOS_DEBUG, "Calling FspMemoryInit: 0x%p\n", fsp_memory_init);
+	printk(BIOS_DEBUG, "Calling FspMemoryInit: 0x%p\n", fsp_raminit);
 	printk(BIOS_SPEW, "\t%p: nvs_buffer\n", raminit_params.nvs_buffer);
 	printk(BIOS_SPEW, "\t%p: rt_buffer\n", raminit_params.rt_buffer);
 	printk(BIOS_SPEW, "\t%p: hob_list\n", raminit_params.hob_list);
