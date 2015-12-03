@@ -22,6 +22,7 @@ DefinitionBlock(
 	Scope (\_SB) {
 		Device (PCI0)
 		{
+                #include <soc/intel/apollolake/acpi/northbridge.asl>
 		}
 	}
 
