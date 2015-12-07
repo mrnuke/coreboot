@@ -14,7 +14,6 @@
 #include <arch/io.h>
 #include <arch/cpu.h>
 #include <console/console.h>
-#include <cbmem.h>
 #include <fsp/api.h>
 #include <fsp/util.h>
 #include <string.h>
@@ -58,7 +57,8 @@ void platform_fsp_memory_init_params_cb(struct MEMORY_INIT_UPD *memupd)
 }
 
 static enum fsp_status do_fsp_memory_init(void **hob_list_ptr,
-					  struct fsp_header *hdr)
+					  struct fsp_header *hdr,
+					  size_t tolum_size)
 {
 	enum fsp_status status;
 	fsp_memory_init_fn fsp_raminit;
@@ -74,7 +74,7 @@ static enum fsp_status do_fsp_memory_init(void **hob_list_ptr,
 	memset(&rt_buffer, 0, sizeof(rt_buffer));
 
 	rt_buffer.upd_data_rgn = &raminit_upd;
-	rt_buffer.bootloader_tolum_size = cbmem_overhead_size();
+	rt_buffer.bootloader_tolum_size = tolum_size;
 
 	/* Get any board specific changes */
 	raminit_params.nvs_buffer = NULL;
@@ -114,12 +114,12 @@ static void relocate_fit(void)
 	memcpy((void*)CONFIG_FIT_CAR_ADDR, (void*)fit_loc, FIT_SIZE);
 }
 
-enum fsp_status fsp_memory_init(void **hob_list)
+enum fsp_status fsp_memory_init(void **hob_list, size_t tolum_size)
 {
 	struct fsp_header hdr;
 
 	if (fsp_load_binary(&hdr, "blobs/fsp-m.bin") != CB_SUCCESS)
 		return FSP_NOT_FOUND;
 	relocate_fit();
-	return do_fsp_memory_init(hob_list, &hdr);
+	return do_fsp_memory_init(hob_list, &hdr, tolum_size);
 }

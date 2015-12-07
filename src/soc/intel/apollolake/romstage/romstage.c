@@ -84,7 +84,7 @@ asmlinkage void* romstage_entry(void)
 
 	soc_early_romstage_init();
 
-	fsp_memory_init(&hob_list_ptr);
+	fsp_memory_init(&hob_list_ptr, cbmem_overhead_size());
 
 	fsp_find_reserved_memory(&fsp_mem, hob_list_ptr);
 

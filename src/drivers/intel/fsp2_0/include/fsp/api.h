@@ -39,7 +39,7 @@ enum fsp_notify_phase {
 
 
 /* Main FSP stages */
-enum fsp_status fsp_memory_init(void **hob_list);
+enum fsp_status fsp_memory_init(void **hob_list, size_t tolum_size);
 enum fsp_status fsp_silicon_init(void);
 enum fsp_status fsp_notify(enum fsp_notify_phase phase);
 
