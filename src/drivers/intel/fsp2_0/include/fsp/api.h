@@ -47,4 +47,56 @@ enum fsp_status fsp_notify(enum fsp_notify_phase phase);
 void platform_fsp_memory_init_params_cb(struct MEMORY_INIT_UPD *memupd);
 void platform_fsp_silicon_init_params_cb(struct SILICON_INIT_UPD *silupd);
 
+/*
+ * # DOCUMENTATION:
+ *
+ * This file defines the interface between coreboot and the FSP 2.0 wrapper
+ * fsp_memory_init(), fsp_silicon_init(), and fsp_notify() are the main entry
+ * points and map 1:1 to the FSP entry points of the same name.
+ *
+ * ### fsp_memory_init():
+ *     - hob_list: retuns a pointer to the HOB storage area created by FSP
+ *     - tolum_size: The size of the memory area below TSEG to reserve for
+ *                   use by coreboot
+ *
+ * This function is responsible for loading and executing the memory
+ * initialization code from the FSP-M binary. It expects this binary to reside
+ * in cbfs as "blobs/fsp-m.bin".
+ *
+ * The function takes two parameters, which are described below, but does not
+ * take in memory parameters as an argument. The memory parameters can be filled
+ * in with platform_fsp_memory_init_params_cb(). This is a weak callback symbol
+ * that fsp_memory_init() will call.
+ *
+ * FSP MemoryInit will "reserve" a memory area below TSEG for use by later FSP
+ * stages, and it expects that this memory area not be written. It can, however,
+ * leave an area of memory between TSEG and the fsp reserved region available
+ * for use by coreboot. The size of this area is specified by the "tolum_size"
+ * parameter.
+ *
+ * FSP returns information about the memory layout in a series of structures
+ * called hand-off-blocks (HOB). The "hob_list" output parameter will point to
+ * the start of the HOB list. The fsp reserved region will also be described by
+ * one of the HOBs. For more information on parsing these structures, see
+ * fsp/util.h
+ *
+ *
+ * ### fsp_silicon_init():
+ *
+ * This function is responsible for loading and executing the silicon
+ * initialization code from the FSP-S binary. It expects this binary to reside
+ * in cbfs as "blobs/fsp-s.bin".
+ *
+ * Like fsp_memory_init(), it provides a callback to fill in FSP-specific
+ * parameters, via platform_fsp_silicon_init_params_cb().
+ *
+ *
+ * ### fsp_notify():
+ *     - phase: Which FSP notification phase
+ *
+ * This function is responsible for loading and executing the notify code from
+ * the FSP-S binary. It expects that fsp_silicon_init() has already been called
+ * succesfully, and that the FSP-S binary is still loaded into memory.
+ */
+
 #endif /* _FSP2_0_API_H_ */
