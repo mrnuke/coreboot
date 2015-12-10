@@ -22,11 +22,11 @@ static const struct pad_config aplk_rvp_gpios[] = {
 	PAD_CFG_NF(GPIO_195, NATIVE, DEEP, NF1),	/* PANEL0_BKLTCTL */
 };
 
-static void mainboard_enable(struct device *dev)
+static void mainboard_init(void *chip_info)
 {
 	gpio_configure_pads(aplk_rvp_gpios, ARRAY_SIZE(aplk_rvp_gpios));
 }
 
 struct chip_operations mainboard_ops = {
-	.enable_dev = mainboard_enable,
+	.init = mainboard_init,
 };
