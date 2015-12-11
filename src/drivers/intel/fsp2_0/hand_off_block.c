@@ -73,13 +73,32 @@ enum hob_type {
 };
 
 /* UUIDs (GUIDs) in little-endian, so they can be used with memcmp() */
+static const uint8_t uuid_owner_bootloader_tolum[16] = {
+	0x56, 0x4f, 0xff, 0x73, 0x8e, 0xaa, 0x51, 0x44,
+	0xb3, 0x16, 0x36, 0x35, 0x36, 0x67, 0xad, 0x44,
+};
+
 static const uint8_t uuid_owner_fsp[16] = {
 	0x59, 0x97, 0xa7, 0x69, 0x73, 0x13, 0x67, 0x43,
 	0xa6, 0xc4, 0xc7, 0xf5, 0x9e, 0xfd, 0x98, 0x6e,
 };
 
+static const uint8_t uuid_owner_tseg[16] = {
+	0x7c, 0x74, 0x38, 0xd0, 0x0c, 0xd0, 0x80, 0x49,
+	0xb3, 0x19, 0x49, 0x01, 0x99, 0xa4, 0x7d, 0x55
+};
+
 static const uint8_t empty_uuid[16] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+static const struct uuid_name_map {
+	const void *uuid;
+	const char *name;
+} uuid_names[] = {
+	{ uuid_owner_bootloader_tolum,	"BOOTLOADER_TOLUM" },
+	{ uuid_owner_fsp,		"FSP_RESERVED_MEMORY" },
+	{ uuid_owner_tseg,		"TSEG" },
 };
 
 static const char *resource_name(enum resource_type type)
@@ -96,6 +115,19 @@ static const char *resource_name(enum resource_type type)
 static bool uuid_compare(const uint8_t uuid1[16], const uint8_t uuid2[16])
 {
 	return !memcmp(uuid1, uuid2, 16);
+}
+
+static const char *uuid_name(const uint8_t uuid[16])
+{
+	size_t i;
+	const struct uuid_name_map *owner_entry;
+
+	for (i = 0; i < ARRAY_SIZE(uuid_names); i++) {
+		owner_entry = uuid_names + i;
+		if (uuid_compare(uuid, owner_entry->uuid))
+			return owner_entry->name;
+	}
+	return "UNKNOWN";
 }
 
 static const struct hob_header *next_hob(const struct hob_header *parent)
@@ -211,7 +243,7 @@ static void print_guid(const void *base)
 	mid[0] = read16(id + 4);
 	mid[1] = read16(id + 6);
 
-	printk(BIOS_DEBUG, "%08x-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x\n",
+	printk(BIOS_DEBUG, "%08x-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
 	       big, mid[0], mid[1],
 	       id[8], id[9], id[10], id[11], id[12], id[13],id[14], id[15]);
 }
@@ -228,6 +260,7 @@ static void print_resource_descriptor(const void *base)
 	if (!uuid_compare(res->owner_guid, empty_uuid)) {
 		printk(BIOS_DEBUG, "\tOwner GUID: ");
 		print_guid(res->owner_guid);
+		printk(BIOS_DEBUG, " (%s)\n", uuid_name(res->owner_guid));
 	}
 }
 
