@@ -19,8 +19,6 @@
 #include <lib.h>
 #include <string.h>
 
-void hoboparse (const void *hob);
-
 #define HOB_HEADER_LEN		8
 
 struct hob_header {
