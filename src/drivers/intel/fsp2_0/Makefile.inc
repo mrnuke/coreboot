@@ -17,3 +17,7 @@ blobs/fsp-m.bin-type := raw
 cbfs-files-$(CONFIG_ADD_FSP_BINARIES) += blobs/fsp-s.bin
 blobs/fsp-s.bin-file := $(call strip_quotes,$(CONFIG_FSP_S_FILE))
 blobs/fsp-s.bin-type := raw
+
+cbfs-files-$(CONFIG_ADD_VBT_DATA_FILE) += vbt.bin
+vbt.bin-file := $(call strip_quotes,$(CONFIG_VBT_FILE))
+vbt.bin-type := raw

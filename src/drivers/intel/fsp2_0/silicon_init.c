@@ -11,6 +11,7 @@
  */
 
 #include <arch/cpu.h>
+#include <cbfs.h>
 #include <console/console.h>
 #include <fsp/api.h>
 #include <fsp/util.h>
@@ -20,6 +21,17 @@ typedef asmlinkage enum fsp_status (*fsp_silicon_init_fn)
 				   (struct SILICON_INIT_UPD *upd);
 
 extern struct fsp_header *fsps_hdr;
+
+static uintptr_t load_vbt(void)
+{
+	void *vbt;
+
+	vbt = cbfs_boot_map_with_leak("vbt.bin", CBFS_TYPE_RAW, NULL);
+	if (!vbt)
+		printk(BIOS_NOTICE, "Could not locate a VBT file in CBFS\n");
+
+	return (uintptr_t)vbt;
+}
 
 static enum fsp_status do_silicon_init(struct fsp_header *hdr)
 {
@@ -34,6 +46,8 @@ static enum fsp_status do_silicon_init(struct fsp_header *hdr)
 
 	silicon_init = (void *)(hdr->image_base + hdr->silicon_init_entry_offset);
 
+	/* Load VBT first, in case platform callback wishes to patch it */
+	silicon_upd.GraphicsConfigPtr = load_vbt();
 	/* give a chance to populate entries */
 	platform_fsp_silicon_init_params_cb(&silicon_upd);
 
