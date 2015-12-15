@@ -96,6 +96,9 @@ asmlinkage void* romstage_entry(void)
 	if (fsp_mem.base != (uintptr_t)cbmem_find(CBMEM_ID_FSP_RESERVED_MEMORY))
 		die("Failed to accommodate FSP reserved memory request");
 
+	/* Now that CBMEM is up, save the list so ramstage can use it */
+	fsp_save_hob_list(hob_list_ptr);
+
 	return realloc_stack();
 }
 
