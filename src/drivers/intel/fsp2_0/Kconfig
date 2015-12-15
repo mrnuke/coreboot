@@ -13,19 +13,18 @@ config ADD_FSP_BINARIES
 	  Add the FSP-M and FSP-S binaries to CBFS. Note that coreboot does not
 	  use the FSP-T binary, so that will not be included.
 
-if ADD_FSP_BINARIES
-
 config FSP_M_FILE
 	string "Intel FSP-M (memory init) binary path and filename"
+	depends on ADD_FSP_BINARIES
 	help
 	  The path and filename of the Intel FSP-M binary for this platform.
 
 config FSP_S_FILE
 	string "Intel FSP-S (silicon init) binary path and filename"
+	depends on ADD_FSP_BINARIES
 	help
 	  The path and filename of the Intel FSP-S binary for this platform.
 
-endif # ADD_FSP_BINARIES
 
 config FIT_CAR_ADDR
 	hex
