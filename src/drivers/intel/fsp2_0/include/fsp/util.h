@@ -22,6 +22,7 @@
  */
 void fsp_save_hob_list(void *hob_list_ptr);
 const void *fsp_get_hob_list(void);
+const void *fsp_find_extension_hob_by_uuid(const uint8_t *uuid, size_t *size);
 /*
  * Hand-off-block utilities which do not depend on CBMEM, but need to be passed
  * the HOB list explicitly.

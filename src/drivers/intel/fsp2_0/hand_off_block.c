@@ -123,6 +123,19 @@ static const void *hob_header_to_struct(const struct hob_header *hob)
 	return hob_walker.hob_descr;
 }
 
+static const void *hob_header_to_extension_hob(const struct hob_header *hob)
+{
+	union {
+		const struct hob_header *hob_hdr;
+		const void *hob_descr;
+		uintptr_t addr;
+	} hob_walker;
+
+	hob_walker.hob_hdr = hob;
+	hob_walker.addr += HOB_HEADER_LEN + 16; /* header and 16-byte UUID */
+	return hob_walker.hob_descr;
+}
+
 static const
 struct hob_resource *hob_header_to_resource(const struct hob_header *hob)
 {
@@ -227,4 +240,27 @@ void fsp_print_memory_resource_hobs(const void *hob_list)
 		if (hob->type == HOB_TYPE_RESOURCE_DESCRIPTOR)
 			print_resource_descriptor(hob);
 	}
+}
+
+const void *fsp_find_extension_hob_by_uuid(const uint8_t *uuid, size_t *size)
+{
+	const uint8_t *hob_uuid;
+	const struct hob_header *hob = fsp_get_hob_list();
+
+	if (!hob)
+		return NULL;
+
+	for ( ; hob->type != HOB_TYPE_END_OF_HOB_LIST; hob = next_hob(hob)) {
+
+		if (hob->type != HOB_TYPE_GUID_EXTENSION)
+			continue;
+
+		hob_uuid = hob_header_to_struct(hob);
+		if (uuid_compare(hob_uuid, uuid)) {
+			*size = hob->length - (HOB_HEADER_LEN + 16);
+			return hob_header_to_extension_hob(hob);
+		}
+	}
+
+	return NULL;
 }
