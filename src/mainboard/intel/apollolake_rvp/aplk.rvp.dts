@@ -7,8 +7,17 @@ firmware 8M {
         # IBBL is a 32 kb code block that is initially loaded by CSE firmware and
         # is placed in shared SRAM. That SRAM area is mapped in 4G-32K area of
         # the host CPU. Reset vector is set as usual.
-        IBBL @ 0xba480  32K
-        FMAP @ 0xc2480  2K
-	COREBOOT(CBFS) @ 0x380400 2048K 
+	IBBL @ 0x74480 32K
+	FMAP @ 0x7c480 2K
+	RW_SECTION_A @ 0x382000 {
+		VBLOCK_A 64K
+		FW_MAIN_A 768K
+	}
+	RW_SECTION_B @ 0x452000 {
+		VBLOCK_B 64K
+		FW_MAIN_B 768K
+	}
+	COREBOOT(CBFS) @ 0x522000 1456K
+	GBB @ 0x68e000 320K
  }
 
