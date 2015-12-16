@@ -39,10 +39,6 @@ config VBT_FILE
 	help
 	  The path and filename of the VBT binary for this platform.
 
-config FIT_CAR_ADDR
-	hex
-	default 0xfef2dc00
-
 # Cache As RAM region layout:
 #
 # +-------------+ DCACHE_RAM_BASE + DCACHE_RAM_SIZE    [0xff000000]
@@ -56,8 +52,7 @@ config FIT_CAR_ADDR
 # |  romstage   |
 # |    code     |
 # +-------------+ ROMSTAGE_CAR_ADDR                    [0xfef2e000]
-# |  FIT TABLE  |
-# +-------------+ FIT_CAR_ADDR                         [0xfef2dc00]
+# |             |
 # |   FSP-M     |
 # | stack/data  |
 # +-------------+ DCACHE_RAM_BASE + 0x4000             [0xfef04000]

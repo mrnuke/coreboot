@@ -83,6 +83,7 @@ static enum fsp_status do_fsp_memory_init(void **hob_list_ptr,
 
 	/* Update the UPD data */
 	raminit_upd.GpioPadInitTablePtr = NULL;
+	raminit_upd.FitTablePtr = read32((void *)FIT_POINTER);
 	fill_console_params(&raminit_upd);
 	platform_fsp_memory_init_params_cb(&raminit_upd);
 
@@ -103,23 +104,12 @@ static enum fsp_status do_fsp_memory_init(void **hob_list_ptr,
 	return status;
 }
 
-/*
- * Relocate FIT table to FSP-M's stack/data space
- *
- * FSP-M expects to find FIT entries at some address hardcoded in FSP.
- */
-static void relocate_fit(void)
-{
-	uint32_t fit_loc = read32((void *)FIT_POINTER);
-	memcpy((void*)CONFIG_FIT_CAR_ADDR, (void*)fit_loc, FIT_SIZE);
-}
-
 enum fsp_status fsp_memory_init(void **hob_list, size_t tolum_size)
 {
 	struct fsp_header hdr;
 
 	if (fsp_load_binary(&hdr, "blobs/fsp-m.bin") != CB_SUCCESS)
 		return FSP_NOT_FOUND;
-	relocate_fit();
+
 	return do_fsp_memory_init(hob_list, &hdr, tolum_size);
 }
