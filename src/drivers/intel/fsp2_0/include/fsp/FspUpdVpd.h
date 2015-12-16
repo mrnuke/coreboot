@@ -1,6 +1,6 @@
 /** @file
 
-Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2016, Intel Corporation. All rights reserved.<BR>
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -79,216 +79,228 @@ struct BL_GPIO_PAD_INIT {
   wchar_t         *PadName;
 } __attribute__((packed));
 
+struct BL_HDA_VERB_TABLE_HEADER {
+  uint32_t  VendorDeviceId;       ///< Codec Vendor/Device ID
+  uint8_t   RevisionId;           ///< Revision ID of the codec. 0xFF matches any revision.
+  uint8_t   SdiNo;                ///< SDI number, 0xFF matches any SDI.
+  uint16_t  DataDwords;           ///< Number of data DWORDs following the header.
+  uint8_t   FrontPanelSupport;
+  uint8_t   Padding[3];
+} __attribute__((packed));
+
+struct BL_HDAUDIO_VERB_TABLE {
+  struct BL_HDA_VERB_TABLE_HEADER     VerbTableHeader;
+  uint32_t                       VerbTableData[];
+} __attribute__((packed));
+
 
 
 #define FSP_TEMP_RAM_INIT_UPD_SIGNATURE  0x4450555F54505346        /* 'FSPT_UPD' */
 #define FSP_MEMORY_INIT_UPD_SIGNATURE    0x4450555F4D505346        /* 'FSPM_UPD' */
 #define FSP_SILICON_INIT_UPD_SIGNATURE   0x4450555F53505346        /* 'FSPS_UPD' */
+#define FSP_IMAGE_ID                     0x245053464C504124        /* '$APLFSP$' */
+#define FSP_IMAGE_REV                    0x00060000
 
 struct DRAM_CONFIG {
-/** Offset 0x0000
+/** Offset 0x00A0
     Package
     NOTE: First option is CoPOP if LPDDR3/LPDDR4 is being used. It is SODIMM if DDR3L is being used.
 **/
   uint8_t                       Package;
-/** Offset 0x0001
+/** Offset 0x00A1
     Profile
     Profile list
 **/
   uint8_t                       Profile;
-/** Offset 0x0002
+/** Offset 0x00A2
     MemoryDown
     Memory Down.
 **/
   uint8_t                       MemoryDown;
-/** Offset 0x0003
+/** Offset 0x00A3
     DDR3LPageSize
     NOTE: Only for memory down or downgrade DDR3L frequency.
 **/
   uint8_t                       DDR3LPageSize;
-/** Offset 0x0004
+/** Offset 0x00A4
     DDR3LASR
     NOTE: Only for memory down.
 **/
   uint8_t                       DDR3LASR;
-/** Offset 0x0005
+/** Offset 0x00A5
     ScramblerSupport
     Scrambler Support.
 **/
   uint8_t                       ScramblerSupport;
-/** Offset 0x0006
+/** Offset 0x00A6
     ChannelHashMask
     Channel Hash Mask.
 **/
   uint16_t                      ChannelHashMask;
-/** Offset 0x0008
+/** Offset 0x00A8
     SliceHashMask
     Slice Hash Mask.
 **/
   uint16_t                      SliceHashMask;
-/** Offset 0x000A
+/** Offset 0x00AA
     InterleavedMode
     Interleaved Mode.
 **/
   uint8_t                       InterleavedMode;
-/** Offset 0x000B
+/** Offset 0x00AB
     ChannelsSlicesEnable
     Channels Slices Enable.
 **/
   uint8_t                       ChannelsSlicesEnable;
-/** Offset 0x000C
+/** Offset 0x00AC
     MinRefRate2xEnable
     Provided as a means to defend against Row-Hammer attacks.
 **/
   uint8_t                       MinRefRate2xEnable;
-/** Offset 0x000D
+/** Offset 0x00AD
     DualRankSupportEnable
     Dual Rank Support Enable.
 **/
   uint8_t                       DualRankSupportEnable;
-/** Offset 0x000E
+/** Offset 0x00AE
     DisableFastBoot
     00: Disabled; Used saved training data (if valid)\n01: Enabled; Full re-train of memory.
 **/
   uint8_t                       DisableFastBoot;
-/** Offset 0x000F
+/** Offset 0x00AF
     RmtMode
     Rank Margin Tool Mode.
 **/
   uint8_t                       RmtMode;
-/** Offset 0x0010
+/** Offset 0x00B0
     MemorySizeLimit
     Memory Size Limit: This value is used to restrict the total amount of memory and the calculations based on it. Value is in MB\nExample encodings are: 0x400 = 1GB, 0x800 = 2GB, 0x1000 = 4GB, 0x2000 8GB.
 **/
   uint16_t                      MemorySizeLimit;
-/** Offset 0x0012
+/** Offset 0x00B2
     LowMemoryMaxValue
     Low Memory Max Value: This value is used to restrict the amount of memory below 4GB and the calculations based on it. Value is in MB\nExample encodings are: 0x400 = 1GB, 0x800 = 2GB, 0x1000 = 4GB, 0x2000 8GB.
 **/
   uint16_t                      LowMemoryMaxValue;
-/** Offset 0x0014
+/** Offset 0x00B4
     HighMemoryMaxValue
     High Memory Max Value: This value is used to restrict the amount of memory above 4GB and the calculations based on it. Value is in MB\nExample encodings are: 0x400 = 1GB, 0x800 = 2GB, 0x1000 = 4GB, 0x2000 8GB.
 **/
   uint16_t                      HighMemoryMaxValue;
-/** Offset 0x0016
+/** Offset 0x00B6
     DIMM0SPDAddress
     DIMM0 SPD Address (NOTE: Only for DDR3L only. Please put 0 for MemoryDown.
 **/
   uint8_t                       DIMM0SPDAddress;
-/** Offset 0x0017
+/** Offset 0x00B7
     DIMM1SPDAddress
     DIMM1 SPD Address (NOTE: Only for DDR3L only. Please put 0 for MemoryDown.
 **/
   uint8_t                       DIMM1SPDAddress;
-/** Offset 0x0018
+/** Offset 0x00B8
     Ch0_RankEnable
     NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
 **/
   uint8_t                       Ch0_RankEnable;
-/** Offset 0x0019
+/** Offset 0x00B9
     Ch0_DeviceWidth
     NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch0_DeviceWidth;
-/** Offset 0x001A
+/** Offset 0x00BA
     Ch0_DramDensity
     NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch0_DramDensity;
-/** Offset 0x001B
+/** Offset 0x00BB
     Ch0_Option
     [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
 **/
   uint8_t                       Ch0_Option;
-/** Offset 0x001C
+/** Offset 0x00BC
     Ch1_RankEnable
     NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
 **/
   uint8_t                       Ch1_RankEnable;
-/** Offset 0x001D
+/** Offset 0x00BD
     Ch1_DeviceWidth
     NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch1_DeviceWidth;
-/** Offset 0x001E
+/** Offset 0x00BE
     Ch1_DramDensity
     NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch1_DramDensity;
-/** Offset 0x001F
+/** Offset 0x00BF
     Ch1_Option
     [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
 **/
   uint8_t                       Ch1_Option;
-/** Offset 0x0020
+/** Offset 0x00C0
     Ch2_RankEnable
     NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
 **/
   uint8_t                       Ch2_RankEnable;
-/** Offset 0x0021
+/** Offset 0x00C1
     Ch2_DeviceWidth
     NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch2_DeviceWidth;
-/** Offset 0x0022
+/** Offset 0x00C2
     Ch2_DramDensity
     NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch2_DramDensity;
-/** Offset 0x0023
+/** Offset 0x00C3
     Ch2_Option
     [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
 **/
   uint8_t                       Ch2_Option;
-/** Offset 0x0024
+/** Offset 0x00C4
     Ch3_RankEnable
     NOTE: Only for memory down\n[0] Enable Rank 0:  Must be set to 1 to enable use of this rank.\n[1] Enable Rank 1:  Must be set to 1 to enable use of this rank.
 **/
   uint8_t                       Ch3_RankEnable;
-/** Offset 0x0025
+/** Offset 0x00C5
     Ch3_DeviceWidth
     NOTE: Only for memory down\nDRAM Device Data Width populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch3_DeviceWidth;
-/** Offset 0x0026
+/** Offset 0x00C6
     Ch3_DramDensity
     NOTE: Only for memory down\nDRAM Device Density populated on Ranks 0 and 1.
 **/
   uint8_t                       Ch3_DramDensity;
-/** Offset 0x0027
+/** Offset 0x00C7
     Ch3_Option
     [0] Rank Select Interleaving Enable.  See Address Mapping section for full description.\n0 - Rank Select Interleaving disabled\n1 - Rank Select Interleaving enabled\n[1] Bank Address Hashing Enable.  See Address Mapping section for full description.\n0 - Bank Address Hashing disabled\n1 - Bank Address Hashing enabled\n[3:2] Reserved\n[5:4] This register specifies the address mapping to be used:\n00 - 1KB (A)\n01 - 2KB (B).
 **/
   uint8_t                       Ch3_Option;
-/** Offset 0x0028
+/** Offset 0x00C8
     Ch0_Bit_swizzling
     Channel 0 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
 **/
   uint8_t                       Ch0_Bit_swizzling[32];
-/** Offset 0x0048
+/** Offset 0x00E8
     Ch1_Bit_swizzling
     Channel 1 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
 **/
   uint8_t                       Ch1_Bit_swizzling[32];
-/** Offset 0x0068
+/** Offset 0x0108
     Ch2_Bit_swizzling
     Channel 2 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
 **/
   uint8_t                       Ch2_Bit_swizzling[32];
-/** Offset 0x0088
+/** Offset 0x0128
     Ch3_Bit_swizzling
     Channel 3 PHY to DUnit DQ mapping (only used if not 1-1 mapping)Range: 0-32.
 **/
   uint8_t                       Ch3_Bit_swizzling[32];
-/** Offset 0x00A8
+/** Offset 0x0148
 **/
   uint8_t                       DramReserved;
 } __attribute__((packed));
-
-#define FSP_IMAGE_ID    0x245053464C504124        /* '$APLFSP$' */
-#define FSP_IMAGE_REV   0x00060000 
-
 
 
 struct TEMP_RAM_INIT_UPD {
@@ -305,6 +317,7 @@ struct TEMP_RAM_INIT_UPD {
 **/
   uint32_t                      ReservedTempRamInitUpd;
 } __attribute__((packed));
+
 
 struct MEMORY_INIT_UPD {
 /** Offset 0x0000
@@ -373,48 +386,39 @@ struct MEMORY_INIT_UPD {
 **/
   uint8_t                       PrimaryVideoAdaptor;
 /** Offset 0x0095
-    GT PM Support
-    Enable/Disable GT power management support.
 **/
-  uint8_t                       PmSupport;
-/** Offset 0x0096
-    RC6(Render Standby)
-    Enable/Disable render standby support.
-**/
-  uint8_t                       EnableRenderStandby;
-/** Offset 0x0097
-    PAVP Enable
-    Enable/Disable Protected Audio Visual Path (PAVP).
-**/
-  uint8_t                       PavpEnable;
-/** Offset 0x0098
-**/
-  uint64_t                      UnusedUpdSpace3;
-/** Offset 0x0000
+  uint8_t                       UnusedUpdSpace3[11];
+/** Offset 0x00A0
 **/
   struct DRAM_CONFIG                 DramConfig;
-/** Offset 0x01B9
+/** Offset 0x0149
 **/
-  uint8_t                       UnusedUpdSpace6[35];
-/** Offset 0x01DC
+  uint8_t                       UnusedUpdSpace4[31];
+/** Offset 0x0168
+    FIT Table Pointer
+    FIT table pointer.
+**/
+  uint32_t                      FitTablePtr;
+/** Offset 0x016C
     OEM File Loading Address
     Determine the memory base address to load a specified file from CSE file system after memory is available.
 **/
   uint32_t                      OemLoadingBase;
-/** Offset 0x01E0
+/** Offset 0x0170
     OEM File Name to Load
     Specify a file name to load from CSE file system after memory is available. Empty indicates no file needs to be loaded.
 **/
   uint8_t                       OemFileName[16];
-/** Offset 0x01F0
+/** Offset 0x0180
     GPIO Table Pointer
     GPIO table pointer to a BL_GPIO_PAD_INIT structure.
 **/
   struct BL_GPIO_PAD_INIT*           GpioPadInitTablePtr;
-/** Offset 0x01F4
+/** Offset 0x0184
 **/
   uint32_t                      ReservedMemoryInitUpd;
 } __attribute__((packed));
+
 
 struct SILICON_INIT_UPD {
 /** Offset 0x0000
@@ -427,23 +431,129 @@ struct SILICON_INIT_UPD {
 **/
   uint8_t                       UnusedUpdSpace0[23];
 /** Offset 0x0020
+    ActiveProcessorCores
+    Number of active cores.
+**/
+  uint8_t                       ActiveProcessorCores;
+/** Offset 0x0021
+    Disable Core1
+    Disable/Enable Core1.
+**/
+  uint8_t                       DisableCore1;
+/** Offset 0x0022
+    Disable Core2
+    Disable/Enable Core2.
+**/
+  uint8_t                       DisableCore2;
+/** Offset 0x0023
+    Disable Core3
+    Disable/Enable Core3.
+**/
+  uint8_t                       DisableCore3;
+/** Offset 0x0024
+    VMX Enable
+    Enable or Disable VMX.
+**/
+  uint8_t                       VmxEnable;
+/** Offset 0x0025
+    Memory region allocation for Processor Trace
+    Memory region allocation for Processor Trace, allowed range is from 4K (0x0) to 128MB (0xF); <b>0xFF: Disable.
+**/
+  uint8_t                       ProcTraceMemSize;
+/** Offset 0x0026
+    Enable Processor Trace
+    Enable or Disable Processor Trace feature.
+**/
+  uint8_t                       ProcTraceEnable;
+/** Offset 0x0027
+    Eist
+    Enable or Disable Intel SpeedStep Technology.
+**/
+  uint8_t                       Eist;
+/** Offset 0x0028
+    Boot PState
+    Boot PState with HFM or LFM. 0: HFM; 1: LFM.
+**/
+  uint8_t                       BootPState;
+/** Offset 0x0029
+    CPU power states (C-states)
+    Enable or Disable CPU power states (C-states). 0: Disable; 1: Enable.
+**/
+  uint8_t                       EnableCx;
+/** Offset 0x002A
+    Enhanced C-states
+    Enable or Disable Enhanced C-states. 0: Disable; 1: Enable.
+**/
+  uint8_t                       C1e;
+/** Offset 0x002B
+    Bi-Directional PROCHOT#
+    Enable or Disable Bi-Directional PROCHOT#; 0: Disable; 1: Enable.
+**/
+  uint8_t                       BiProcHot;
+/** Offset 0x002C
+    Max Pkg Cstate
+    Max Pkg Cstate. 0:PkgC0C1; 1:PkgC2; 2:PkgC3; 3:PkgC6; 4:PkgC7; 5:PkgC7s; 6:PkgC8; 7:PkgC9; 8:PkgC10; 9:PkgCMax; 254:PkgCpuDefault; 255:PkgAuto.
+**/
+  uint8_t                       PkgCStateLimit;
+/** Offset 0x002D
+**/
+  uint8_t                       UnusedUpdSpace1;
+/** Offset 0x002E
+    C-State auto-demotion
+    C-State Auto Demotion. 0:Disable C1 and C3 Auto-demotion; 1:Enable C3/C6/C7 Auto-demotion to C1; 2:Enable C6/C7 Auto-demotion to C3; 3:Enable C6/C7 Auto-demotion to C1 and C3.
+**/
+  uint8_t                       CStateAutoDemotion;
+/** Offset 0x002F
+    C-State un-demotion
+    C-State un-demotion. 0:Disable C1 and C3 Un-demotion; 1:Enable C1 Un-demotion; 2:Enable C3 Un-demotion; 3:Enable C1 and C3 Un-demotion.
+**/
+  uint8_t                       CStateUnDemotion;
+/** Offset 0x0030
+    Max Core C-State
+    Max Core C-State. 0:Unlimited;1:C1;2:C3;3:C6;4:C7;5:C8;6:C9;7:C10;8:CCx.
+**/
+  uint8_t                       MaxCoreCState;
+/** Offset 0x0031
+    Package C-State Demotion
+    Enable or Disable Package Cstate Demotion. 0:Disable; 1: Enable.
+**/
+  uint8_t                       PkgCStateDemotion;
+/** Offset 0x0032
+    Package C-State Un-demotion
+    Enable or Disable Package Cstate UnDemotion. 0:Disable; 1: Enable.
+**/
+  uint8_t                       PkgCStateUnDemotion;
+/** Offset 0x0033
+    Turbo Mode
+    Enable or Disable long duration Turbo Mode. 0:Disable; 1: Enable.
+**/
+  uint8_t                       TurboMode;
+/** Offset 0x0034
+**/
+  uint8_t                       UnusedUpdSpace2[12];
+/** Offset 0x0040
+    HD-Audio I/O Buffer Ownership
+    Set HD-Audio I/O Buffer Ownership.
+**/
+  uint8_t                       HdAudioIoBufferOwnership;
+/** Offset 0x0041
+**/
+  uint8_t                       UnusedUpdSpace3[60];
+/** Offset 0x007D
     Enable SD controller
     Enable/disable SD Card controller.
 **/
   uint8_t                       SdcardEnabled;
-/** Offset 0x0021
+/** Offset 0x007E
     Enable SDIO controller
     Enable/disable SDIO controller.
 **/
   uint8_t                       SdioEnabled;
-/** Offset 0x0022
+/** Offset 0x007F
     Enable eMMC controller
     Enable/disable eMMC controller.
 **/
   uint8_t                       eMMCEnabled;
-/** Offset 0x0023
-**/
-  uint8_t                       UnusedUpdSpace1[93];
 /** Offset 0x0080
     Enable SATA
     Enable/disable SATA controller.
@@ -473,7 +583,7 @@ struct SILICON_INIT_UPD {
     Enable PCIE RP
     Enable/disable PCIE Root Ports. 0: disable, 1: enable. One byte for each port, byte0 for port1, byte1 for port2, and so on.
 **/
-  uint8_t                       PcieRpEnable[6];
+  uint8_t                       PcieRootPortEn[6];
 /** Offset 0x008D
     Configure CLKREQ Number
     Configure Root Port CLKREQ Number if CLKREQ is supported. Each value in array can be between 0-6. One byte for each port, byte0 for port1, byte1 for port2, and so on.
@@ -490,26 +600,91 @@ struct SILICON_INIT_UPD {
 **/
   uint8_t                       PortUsb30Enable[6];
 /** Offset 0x00A1
-    Enable XHCI SSIC Eanble
-    Enable/disable XHCI SSIC port.
+    Enable XHCI SSIC ports
+    Enable/disable XHCI SSIC ports. One byte for each port, byte0 for port0, byte1 for port1.
 **/
-  uint8_t                       SsicPortEnable;
-/** Offset 0x00A2
+  uint8_t                       SsicPortEnable[2];
+/** Offset 0x00A3
     Enable SMBus
     Enable/disable SMBus controller.
 **/
   uint8_t                       SmbusEnable;
-/** Offset 0x00A3
+/** Offset 0x00A4
+    High Definition Audio Verb Table Pointer
+    High Definition Audio Verb Table structure for initialization.
 **/
-  uint8_t                       UnusedUpdSpace2[13];
-/** Offset 0x00B0
+  struct BL_HDAUDIO_VERB_TABLE*      HdaVerbTablePtr;
+/** Offset 0x00A8
+    Enable/Disable P2SB device hidden.
+    Enable/Disable P2SB device hidden.
+**/
+  uint8_t                       HideP2sb;
+/** Offset 0x00A9
+**/
+  uint8_t                       UnusedUpdSpace4[52];
+/** Offset 0x00DD
+    Ufs Enable/Disable
+    Enable/Disable Ufs.
+**/
+  uint8_t                       UfsEnabled;
+/** Offset 0x00DE
     IPU Enable/Disable
     Enable/Disable IPU Device.
 **/
   uint8_t                       IpuEn;
-/** Offset 0x00B1
+/** Offset 0x00DF
+    IMGU ACPI mode selection
+    0=Auto, 1(Default)=IGFX Child device, 2=ACPI device
 **/
-  uint8_t                       UnusedUpdSpace3[303];
+  uint8_t                       IpuAcpiMode;
+/** Offset 0x00E0
+    ResetSelect
+    ResetSelect. 0x6:warm reset; 0xE:cold reset
+**/
+  uint8_t                       ResetSelect;
+/** Offset 0x00E1
+    CRIDSettings
+    PMC CRID setting. 0:Disable;1:CRID_1;2:CRID_2;3:CRID_3
+**/
+  uint8_t                       CRIDSettings;
+/** Offset 0x00E2
+    Enable HPET
+    Enable/disable HPET.
+**/
+  uint8_t                       Hpet;
+/** Offset 0x00E3
+    Enable PCIE Clock Gating
+    Enable/disable PCIE Clock Gating.0:Enable;1:Disable
+**/
+  uint8_t                       PcieClockGatingDisabled;
+/** Offset 0x00E4
+    Enable PCIE Root Port 8xh Decode
+    Enable/disable PCIE Root Port 8xh Decode.0:Disable;1:Enable
+**/
+  uint8_t                       PcieRootPort8xhDecode;
+/** Offset 0x00E5
+    PCIE 8xh Decode Port Index
+    PCIE 8xh Decode Port Index.
+**/
+  uint8_t                       Pcie8xhDecodePortIndex;
+/** Offset 0x00E6
+    Enable PCIE Root Port Peer Memory Write
+    Enable/disable PCIE root port peer memory write.0:Disable;1:Enable
+**/
+  uint8_t                       PcieRootPortPeerMemoryWriteEnable;
+/** Offset 0x00E7
+    Enable SC Gaussian Mixture Models
+    Enable/disable SC Gaussian Mixture Models.0:Disable;1:Enable
+**/
+  uint8_t                       Gmm;
+/** Offset 0x00E8
+    Enable S0ix
+    Enable/disable S0ix.0:Disable;1:Enable
+**/
+  uint8_t                       S0ix;
+/** Offset 0x00E9
+**/
+  uint8_t                       UnusedUpdSpace5[247];
 /** Offset 0x01E0
     BMP Logo Data Size
     BMP logo data buffer size.
@@ -526,11 +701,41 @@ struct SILICON_INIT_UPD {
 **/
   uint32_t                      GraphicsConfigPtr;
 /** Offset 0x01EC
+    GT PM Support
+    Enable/Disable GT power management support.
 **/
-  uint8_t                       UnusedUpdSpace4[12];
-/** Offset 0x01F8
+  uint8_t                       PmSupport;
+/** Offset 0x01ED
+    RC6(Render Standby)
+    Enable/Disable render standby support.
 **/
-  uint32_t                      ReservedSiliconInitUpd;
+  uint8_t                       EnableRenderStandby;
+/** Offset 0x01EE
+    PAVP Enable
+    Enable/Disable Protected Audio Visual Path (PAVP).
+**/
+  uint8_t                       PavpEnable;
+/** Offset 0x01EF
+    PAVP PR3
+    Enable/Disable PAVP PR3
+**/
+  uint8_t                       PavpPr3;
+/** Offset 0x01F0
+    CdClock Frequency selection
+    0: 144 Mhz, 1: 288 Mhz, 2: 384 Mhz, 3: 576 Mhz, 4(Default): 624 Mhz
+**/
+  uint8_t                       CdClock;
+/** Offset 0x01F1
+    Enable/Disable PeiGraphicsPeimInit
+    Enable(Default): Enable PeiGraphicsPeimInit, Disable: Disable PeiGraphicsPeimInit
+**/
+  uint8_t                       PeiGraphicsPeimInit;
+/** Offset 0x01F2
+**/
+  uint8_t                       UnusedUpdSpace6[11];
+/** Offset 0x01FD
+**/
+  uint8_t                       ReservedSiliconInitUpd;
 } __attribute__((packed));
 
 #endif
