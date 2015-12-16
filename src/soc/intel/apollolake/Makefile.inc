@@ -29,6 +29,7 @@ ramstage-y += car_teardown.c
 ramstage-y += chip.c
 ramstage-y += cpu.c
 ramstage-y += gpio.c
+ramstage-y += graphics.c
 ramstage-y += lpc.c
 ramstage-y += memmap.c
 ramstage-y += mmap_boot.c
