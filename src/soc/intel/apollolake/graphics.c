@@ -12,6 +12,12 @@
 
 #include <console/console.h>
 #include <fsp/util.h>
+#include <device/device.h>
+#include <device/pci.h>
+#include <device/pci_ids.h>
+#include <soc/pci_ids.h>
+
+static uintptr_t framebuffer_bar = (uintptr_t)NULL;
 
 void lb_framebuffer(struct lb_header *header)
 {
@@ -20,6 +26,38 @@ void lb_framebuffer(struct lb_header *header)
 
 	framebuffer = (void *)lb_new_record(header);
 	ret = fsp_fill_lb_framebuffer(framebuffer);
-	if (ret != CB_SUCCESS)
+	if (ret != CB_SUCCESS) {
 		printk(BIOS_ALERT, "FSP did not return a valid framebuffer\n");
+		return;
+        }
+
+	/* Resource allocator can move the BAR around after FSP configures it */
+	if (!framebuffer_bar) {
+		printk(BIOS_ALERT, "Framebuffer BAR invalid (00:02.0 BAR2)\n");
+		return;
+	}
+
+	framebuffer->physical_address = framebuffer_bar;
+	printk(BIOS_DEBUG, "Graphics framebuffer located at 0x%llx\n",
+	       framebuffer->physical_address);
 }
+
+static void igd_set_resources(struct device *dev)
+{
+	framebuffer_bar = find_resource(dev, PCI_BASE_ADDRESS_2)->base;
+	pci_dev_set_resources(dev);
+}
+
+static struct device_operations igd_ops = {
+	.read_resources   = pci_dev_read_resources,
+	.set_resources    = igd_set_resources,
+	.enable_resources = pci_dev_enable_resources,
+	.init             = pci_dev_init,
+	.enable           = DEVICE_NOOP
+};
+
+static const struct pci_driver uart_driver __pci_driver = {
+	.ops	= &igd_ops,
+	.vendor	= PCI_VENDOR_ID_INTEL,
+	.device	= PCI_DEV_ID_APOLLOLAKE_IGD,
+};
