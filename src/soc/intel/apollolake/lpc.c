@@ -14,6 +14,7 @@
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <soc/acpi.h>
+#include <soc/pci_ids.h>
 
 static void soc_lpc_add_io_resources(device_t dev)
 {
@@ -42,13 +43,8 @@ static struct device_operations device_ops = {
 	.write_acpi_tables = southbridge_write_acpi_tables,
 };
 
-static const unsigned short pci_device_ids[] = {
-	0x5AE8,
-	0
-};
-
 static const struct pci_driver soc_lpc __pci_driver = {
 	.ops = &device_ops,
 	.vendor = PCI_VENDOR_ID_INTEL,
-	.devices = pci_device_ids,
+	.device = PCI_DEV_ID_APOLLOLAKE_LPC,
 };

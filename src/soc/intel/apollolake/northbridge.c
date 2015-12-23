@@ -16,6 +16,7 @@
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <soc/northbridge.h>
+#include <soc/pci_ids.h>
 
 static uint32_t get_bar(device_t dev, unsigned int index)
 {
@@ -124,13 +125,8 @@ static struct device_operations northbridge_ops = {
 	.enable           = DEVICE_NOOP
 };
 
-static const unsigned short northbridge_ids[] = {
-	MCH_APOLLOLAKE_ID,
-	0
-};
-
 static const struct pci_driver northbridge_driver __pci_driver = {
 	.ops     = &northbridge_ops,
 	.vendor  = PCI_VENDOR_ID_INTEL,
-	.devices = northbridge_ids
+	.device  = PCI_DEV_ID_APOLLOLAKE_NB
 };

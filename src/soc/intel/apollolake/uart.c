@@ -14,6 +14,7 @@
 #include <device/device.h>
 #include <device/pci.h>
 #include <device/pci_ids.h>
+#include <soc/pci_ids.h>
 
 /*
  * Shadow BAR for console UART:
@@ -55,7 +56,8 @@ static struct device_operations uart_ops = {
 };
 
 static const unsigned short uart_ids[] = {
-	0x5abc, 0x5abe, 0x5ac0, 0x5aee,
+	PCI_DEV_ID_APOLLOLAKE_UART0, PCI_DEV_ID_APOLLOLAKE_UART1,
+	PCI_DEV_ID_APOLLOLAKE_UART2, PCI_DEV_ID_APOLLOLAKE_UART3,
 	0
 };
 
