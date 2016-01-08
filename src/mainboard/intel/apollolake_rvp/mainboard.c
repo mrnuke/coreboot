@@ -15,6 +15,7 @@
 
 /* TODO: Move GPIO config to its own file once we get more GPIOs in the list */
 static const struct pad_config aplk_rvp_gpios[] = {
+	PAD_CFG_GPO(GPIO_22, 1, DEEP),			/* SATA Direct power */
 	PAD_CFG_NF(GPIO_46, NATIVE, DEEP, NF1),		/* UART2 RX*/
 	PAD_CFG_NF(GPIO_47, NATIVE, DEEP, NF1),		/* UART2 TX*/
 	PAD_CFG_NF(GPIO_193, NATIVE, DEEP, NF1),	/* PANEL0_VDDEN */
