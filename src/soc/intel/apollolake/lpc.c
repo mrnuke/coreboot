@@ -10,11 +10,13 @@
  * (at your option) any later version.
  */
 
+#include <cbmem.h>
 #include <device/device.h>
 #include <device/pci.h>
 #include <device/pci_ids.h>
 #include <soc/acpi.h>
 #include <soc/pci_ids.h>
+#include <vendorcode/google/chromeos/chromeos.h>
 
 static void soc_lpc_add_io_resources(device_t dev)
 {
@@ -29,17 +31,22 @@ static void soc_lpc_add_io_resources(device_t dev)
 
 static void soc_lpc_read_resources(device_t dev)
 {
+	struct global_nvs_t *gnvs;
 	/* Get the PCI resources of this device. */
 	pci_dev_read_resources(dev);
 
 	/* Add IO resources to LPC. */
 	soc_lpc_add_io_resources(dev);
+
+	/* Allocate ACPI NVS in CBMEM */
+	gnvs = cbmem_add(CBMEM_ID_ACPI_GNVS, sizeof(*gnvs));
 }
 
 static struct device_operations device_ops = {
 	.read_resources = &soc_lpc_read_resources,
 	.set_resources = &pci_dev_set_resources,
 	.enable_resources = &pci_dev_enable_resources,
+	.acpi_inject_dsdt_generator = southbridge_inject_dsdt,
 	.write_acpi_tables = southbridge_write_acpi_tables,
 };
 

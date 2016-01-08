@@ -14,10 +14,12 @@
 #define _SOC_APOLLOLAKE_ACPI_H_
 
 #include <arch/acpi.h>
+#include <soc/nvs.h>
 
 /* Zero value won't be programmed again in FADT table. */
 void soc_fill_common_fadt(acpi_fadt_t * fadt);
 
+void southbridge_inject_dsdt(device_t device);
 unsigned long southbridge_write_acpi_tables(device_t device,
                 unsigned long current, struct acpi_rsdp *rsdp);
 
