@@ -11,6 +11,7 @@
 
 #include <arch/cpu.h>
 #include <cbfs.h>
+#include <console/console.h>
 #include <halt.h>
 
 /* Called from assembly. Prototype not needed by external .c file */
@@ -41,6 +42,9 @@ asmlinkage void bootblock_main(uint32_t bist, uint32_t tsc_lo, uint32_t tsc_hi)
 	void *entry;
 	struct cbfs_stage *romstage;
 	const char* target1 = get_next_stage_name();
+
+	if (IS_ENABLED(CONFIG_BOOTBLOCK_CONSOLE))
+		console_init();
 
 	romstage = cbfs_boot_map_with_leak(target1, CBFS_TYPE_STAGE, NULL);
 
