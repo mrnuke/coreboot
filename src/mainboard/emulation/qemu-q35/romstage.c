@@ -28,8 +28,8 @@
 
 #include "../qemu-i440fx/memory.c"
 
-#include <cpu/intel/romstage.h>
-void main(unsigned long bist)
+#include <cpu/qemu-x86/romstage.h>
+void main(void)
 {
 	int cbmem_was_initted;
 

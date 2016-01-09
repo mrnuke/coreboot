@@ -22,20 +22,12 @@
 #define STACK_SIZE 0x10000
 #define STACK_BASE 0xd0000
 
-	/* Save the BIST result. */
-	movl	%eax, %ebp
-
 qemu_x86_assembly_entry:
 	post_code(0x20)
 
 	/* Set up the stack pointer. */
 	movl	$(STACK_BASE + STACK_SIZE), %eax
 	movl	%eax, %esp
-
-	/* Restore the BIST result. */
-	movl	%ebp, %eax
-	movl	%esp, %ebp
-	pushl	%eax
 
 before_romstage:
 	post_code(0x29)
