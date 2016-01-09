@@ -12,6 +12,7 @@
 #include <arch/cpu.h>
 #include <cbfs.h>
 #include <console/console.h>
+#include <cpu/x86/bist.h>
 #include <halt.h>
 
 /* Called from assembly. Prototype not needed by external .c file */
@@ -45,6 +46,12 @@ asmlinkage void bootblock_main(uint32_t bist, uint32_t tsc_lo, uint32_t tsc_hi)
 
 	if (IS_ENABLED(CONFIG_BOOTBLOCK_CONSOLE))
 		console_init();
+
+	/*
+	 * TODO: We might want a cleaner way to handle BIST reporting before we
+	 * can converge with the generic bootblock in lib/.
+	 */
+	report_bist_failure(bist);
 
 	romstage = cbfs_boot_map_with_leak(target1, CBFS_TYPE_STAGE, NULL);
 

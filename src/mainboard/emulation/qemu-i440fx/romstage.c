@@ -20,7 +20,6 @@
 #include <device/pnp_def.h>
 #include <pc80/mc146818rtc.h>
 #include <console/console.h>
-#include <cpu/x86/bist.h>
 #include <timestamp.h>
 #include "drivers/pc80/udelay_io.c"
 #include <delay.h>
@@ -37,9 +36,6 @@ void main(unsigned long bist)
 	post_code(0x05);
 
 	console_init();
-
-	/* Halt if there was a built in self test failure */
-	report_bist_failure(bist);
 
 	//print_pci_devices();
 	//dump_pci_devices();
