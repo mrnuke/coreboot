@@ -12,6 +12,7 @@
 ## GNU General Public License for more details.
 ##
 
+cpu_incs-y += $(src)/cpu/qemu-x86/romstage_entry.inc
 bootblock-y += bootblock_asm.S
 bootblock-y += bootblock.c
 ramstage-y += qemu.c
