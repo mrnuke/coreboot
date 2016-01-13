@@ -16,10 +16,14 @@ config CPU_SPECIFIC_OPTIONS
 	select SMP
 	select SSE2
 	select SUPPORT_CPU_UCODE_IN_CBFS
+	# Whatever bits we can salvage from intel/common
+	select SOC_INTEL_COMMON
+	select SOC_INTEL_COMMON_RESET
 	# Misc options
 	select C_ENVIRONMENT_BOOTBLOCK
 	select COLLECT_TIMESTAMPS
 	select DRIVERS_UART_8250MEM_32
+	select HAVE_HARD_RESET
 	select HAVE_INTEL_FIRMWARE
 	select MMCONF_SUPPORT
 	select MMCONF_SUPPORT_DEFAULT
