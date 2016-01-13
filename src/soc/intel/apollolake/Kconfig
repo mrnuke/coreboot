@@ -56,7 +56,7 @@ config DCACHE_RAM_BASE
 
 config DCACHE_RAM_SIZE
 	hex "Length in bytes of cache-as-RAM"
-	default 0x80000
+	default 0x100000
 	help
 	  The size of the cache-as-ram region required during bootblock
 	  and/or romstage.
@@ -66,21 +66,13 @@ config DCACHE_RAM_BOOTBLOCK_STACK_SIZE
 	default 0x800
 	help
 	  The amount of anticipated stack usage from the bootblock during
-	  pre-romstage initialization..
+	  pre-romstage initialization.
 
-config IFD_BIOS_START
+config ROMSTAGE_CAR_ADDR
 	hex
-	default 0x1000
+	default 0xfef2e000
 	help
-	  The starting address of flash region 1 (BIOS), as declared in the
-	  firmware descriptor. This can be obtained via 'ifdtool -d'.
-
-config IFD_BIOS_END
-	hex
-	default ROM_SIZE
-	help
-	  The ending address of flash region 1 (BIOS), as declared in the
-	  firmware descriptor. This can be obtained via 'ifdtool -d'.
+	  The base address (in CAR) where romstage should be linked
 
 config IFD_BIOS_START
 	hex
