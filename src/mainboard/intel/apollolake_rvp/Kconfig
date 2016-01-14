@@ -5,6 +5,7 @@ config BOARD_SPECIFIC_OPTIONS
 	select SOC_INTEL_APOLLOLAKE
 	select BOARD_ROMSIZE_KB_8192
 	select HAVE_ACPI_TABLES
+	select USE_BLOBS
 
 config MAINBOARD_DIR
 	string
@@ -18,9 +19,18 @@ config MAINBOARD_VENDOR
 	string
 	default "Intel"
 
+config FMAP_FILE
+	string
+	default aplk.rvp
+
+config PREBUILT_SPI_IMAGE
+	string
+	default aplk.rvp1.bin.orig if BOARD_INTEL_APOLLOLAKE_RVP1
+	default aplk.rvp2.bin.orig if BOARD_INTEL_APOLLOLAKE_RVP2
+
 config IFD_BIOS_END
 	hex
-	default 0x700000
+	default 0x6FF000
 
 config IFD_BIOS_START
 	hex
@@ -28,7 +38,6 @@ config IFD_BIOS_START
 
 config FLASHMAP_OFFSET
 	hex
-	default 0x3a3040 if BOARD_INTEL_APOLLOLAKE_RVP1
-	default 0x3f10c0 if BOARD_INTEL_APOLLOLAKE_RVP2
+	default 0x7e480
 
 endif # BOARD_INTEL_APOLLOLAKE_RVP1 || BOARD_INTEL_APOLLOLAKE_RVP2
