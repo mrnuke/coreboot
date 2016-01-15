@@ -18,6 +18,8 @@
 #include <device/pci.h>
 #include <fsp/api.h>
 
+#include "chip.h"
+
 static void pci_domain_set_resources(device_t dev)
 {
        assign_resources(dev->link_list);
@@ -58,6 +60,26 @@ static void enable_dev(device_t dev)
 static void soc_init(void *data)
 {
 	fsp_silicon_init();
+}
+
+void platform_fsp_silicon_init_params_cb(struct SILICON_INIT_UPD *silupd)
+{
+	static struct soc_intel_apollolake_config *cfg;
+
+	struct device *dev = dev_find_slot(0, 0);
+	if (!dev && !dev->chip_info) {
+		printk(BIOS_ERR, "BUG! Could not find SOC devicetree config\n");
+		return;
+	}
+
+	cfg = dev->chip_info;
+
+	silupd->PcieRpClkReqNumber[0] = cfg->pcie_rp0_clkreq_pin;
+	silupd->PcieRpClkReqNumber[1] = cfg->pcie_rp1_clkreq_pin;
+	silupd->PcieRpClkReqNumber[2] = cfg->pcie_rp2_clkreq_pin;
+	silupd->PcieRpClkReqNumber[3] = cfg->pcie_rp3_clkreq_pin;
+	silupd->PcieRpClkReqNumber[4] = cfg->pcie_rp4_clkreq_pin;
+	silupd->PcieRpClkReqNumber[5] = cfg->pcie_rp5_clkreq_pin;
 }
 
 struct chip_operations soc_intel_apollolake_ops = {
