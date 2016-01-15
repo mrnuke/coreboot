@@ -14,10 +14,19 @@
 #include <soc/gpio.h>
 
 /* TODO: Move GPIO config to its own file once we get more GPIOs in the list */
+/*
+ * GPIOs:
+ * A tilde (~) before the name means that the signal uses inverted logic.
+ * PCIE RST signals route to the PWRGOOD(PCIe slot) or PERST0(M2 slot) inputs.
+ */
 static const struct pad_config aplk_rvp_gpios[] = {
+	PAD_CFG_GPO(GPIO_13, 1, DEEP),			/* ~PCIE_SLOT2_RST_N */
+	PAD_CFG_GPO(GPIO_15, 1, DEEP),			/* ~WIFI_RST_GPIO_N */
 	PAD_CFG_GPO(GPIO_22, 1, DEEP),			/* SATA Direct power */
+	PAD_CFG_GPO(GPIO_37, 1, DEEP),			/* ~LAN_RST_N */
 	PAD_CFG_NF(GPIO_46, NATIVE, DEEP, NF1),		/* UART2 RX*/
 	PAD_CFG_NF(GPIO_47, NATIVE, DEEP, NF1),		/* UART2 TX*/
+	PAD_CFG_GPO(GPIO_152, 1, DEEP),			/* ~PCIE_SLOT1_RST_N */
 	PAD_CFG_NF(GPIO_193, NATIVE, DEEP, NF1),	/* PANEL0_VDDEN */
 	PAD_CFG_NF(GPIO_194, NATIVE, DEEP, NF1),	/* PANEL0_BKLTEN */
 	PAD_CFG_NF(GPIO_195, NATIVE, DEEP, NF1),	/* PANEL0_BKLTCTL */
