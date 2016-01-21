@@ -29,6 +29,14 @@ qemu_x86_assembly_entry:
 	movl	$(STACK_BASE + STACK_SIZE), %eax
 	movl	%eax, %esp
 
+	/* Clear .car.global section */
+	movl	$_car_global_end, %ecx
+	movl	$_car_global_start, %edi
+	sub	%edi, %ecx
+	shr	$2, %ecx
+	xorl	%eax, %eax
+	rep	stosl
+
 before_romstage:
 	post_code(0x29)
 	/* Call romstage.c main function. */
