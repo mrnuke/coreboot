@@ -1,5 +1,6 @@
 ifeq ($(CONFIG_ARCH_X86),y)
 
+bootblock-$(CONFIG_UDELAY_IO) += udelay_io.c
 romstage-$(CONFIG_DRIVERS_MC146818) += mc146818rtc.c
 ramstage-$(CONFIG_DRIVERS_MC146818) += mc146818rtc.c
 ramstage-y += isa-dma.c
