@@ -16,8 +16,6 @@
 #ifndef __ARCH_STAGES_H
 #define __ARCH_STAGES_H
 
-extern void main(void);
-
 void stage_entry(void) __attribute__((section(".text.stage_entry")));
 void stage_exit(void *);
 void jmp_to_elf_entry(void *entry, unsigned long buffer, unsigned long size);

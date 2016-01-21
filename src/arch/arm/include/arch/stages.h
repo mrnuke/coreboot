@@ -16,8 +16,6 @@
 #ifndef __ARCH_STAGES_H
 #define __ARCH_STAGES_H
 
-extern void main(void);
-
 void stage_entry(void);
 void stage_exit(void *);
 
