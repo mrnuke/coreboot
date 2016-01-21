@@ -28,6 +28,14 @@ bootblock_pre_c_entry:
 	/* Set up a stack */
 	mov	esp, (STACK_BASE + STACK_SIZE)
 
+	/* Clear .car.global section */
+	mov	ecx, _car_global_end
+	mov	edi, _car_global_start
+	sub	ecx, edi
+	shr	ecx, 2
+	xor	eax, eax
+	rep	stos dword ptr es:[edi], eax
+
 	/*
 	 * We have the following values saved from earlier:
 	 * mm0: BIST result
